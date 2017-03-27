@@ -12,8 +12,8 @@ public class StudentProfile {
 	private String lastname;
 	private String password;
 	private Date dob;
-	private int level_class;
-	private int residency_class;
+	private String level_class;
+	private String residency_class;
 	private float gpa;
 	private String email;
 	
@@ -77,12 +77,12 @@ public class StudentProfile {
 	}
 	
 	// Getiing the level classification of student.
-	public int getLevelclass(){
+	public String getLevelclass(){
 		return level_class;
 	}
 			
 	// Setting the level classification of student.
-	public void setLevelclass(int level_class){
+	public void setLevelclass(String level_class){
 		this.level_class = level_class;
 	}
 	
@@ -97,12 +97,12 @@ public class StudentProfile {
 	}	
 
 	// Getiing the residency classification of student.
-	public int getResidencyclass(){
+	public String getResidencyclass(){
 		return residency_class;
 	}
 			
 	// Setting the residency classification of student.
-	public void setResidencyclass(int residency_class){
+	public void setResidencyclass(String residency_class){
 		this.residency_class = residency_class;
 	}
 	
@@ -135,8 +135,8 @@ public class StudentProfile {
 			setLastname(r.getString("Last_Name"));
 			setPassword(r.getString("psswd"));
 			setGPA(r.getFloat("GPA"));
-			setLevelclass(r.getInt("level_class"));
-			setResidencyclass(r.getInt("residency_class"));
+			setLevelclass(r.getString("level_class"));
+			setResidencyclass(r.getString("residency_class"));
 			setEmail(r.getString("email"));
 			
 		} catch (SQLException e) {
