@@ -68,8 +68,17 @@ public class Login {
 				rs2 =  pstmt2.executeQuery();
 				
 				// Checking if the user is an admin or a student.
+				// If the user is an admin.
 				if(rs1.next()){
 					
+				}
+				// If the user is as student.
+				else if(rs2.next()){
+					
+				}
+				// If the user has entered invalid credentials.
+				else{
+					System.out.println("Invalid values entered. Please enter correct values.");
 				}
 				
 			} catch (SQLException e){
