@@ -1,6 +1,7 @@
 package javaCode;
 
 import java.sql.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import dbConnect.connect;
@@ -69,7 +70,7 @@ public class Login {
 	
 	
 	// Method to display the initial menu options to the user.
-	public static void startPage(Scanner ip){
+	public static void startPage(Scanner ip) throws NoSuchElementException{
 		System.out.println("*****Course Registration System*****");
 
 		while (true) {
@@ -92,7 +93,7 @@ public class Login {
 			case 2:
 				connect.closeConnection();
 				connect.closeStatement();
-				//ip.close();
+				ip.close();
 				System.exit(0);
 			
 			default:

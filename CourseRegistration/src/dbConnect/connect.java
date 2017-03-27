@@ -25,8 +25,6 @@ public class connect {
 				System.out.println("Enter Database Password - (StudentId)");
 				String password = sc.next();
 				
-				sc.close();
-				
 				// Establishing a connection to the database.
 				conn = DriverManager.getConnection(jdbcURL, username, password);
 				
