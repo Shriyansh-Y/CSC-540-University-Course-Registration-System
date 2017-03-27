@@ -68,7 +68,7 @@ public class AdminView {
 				}
 			}
 			
-			System.out.println("Enter Student's Date of Birth(YYYY-MM-DD): ");
+			System.out.print("Enter Student's Date of Birth(YYYY-MM-DD): ");
 			String dob = ip.next();
 			
 			pstmt.setInt(1, sid);
@@ -81,8 +81,9 @@ public class AdminView {
 			pstmt.setFloat(8, (float) 0.0);
 			pstmt.setString(9, dob);
 			
+			// Executing the insertion query.
 			rs = pstmt.executeQuery();
-			//connect.close(pstmt);
+
 			// Checking if the insertion of new student is successful or not.
 			ResultSet rs1;
 			PreparedStatement pstmt1 = connect.getConnection().prepareStatement(Queries.verify_login_student);
@@ -90,7 +91,9 @@ public class AdminView {
 			pstmt1.setString(2, Integer.toString(sid));
 			rs1 = pstmt1.executeQuery();
 			if(rs1.next()){
-				System.out.println("New Student created Successfully");
+				System.out.println("\n~~New Student created Successfully~~\n");
+				connect.close(pstmt);
+				connect.close(pstmt1);
 				Login.admin_homepage(ip);
 			}
 			
@@ -105,18 +108,61 @@ public class AdminView {
 	
 	// Method to view student details
 	public static void viewStudentDetails(Scanner ip){
-
+		try{
+			while(true){
+				System.out.println("\n**View Student Details**");
+				System.out.print("Enter the Student ID:");
+				int sid = ip.nextInt();
+				
+				// Object to hold the results of the queries.
+				ResultSet r;
+				
+				// Object to hold the query.
+				PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.get_student_details);
+				pstmt.setInt(1, sid);
+				// Execute the query.
+				r = pstmt.executeQuery();
+				
+				if(r.next()){
+					System.out.println("First Name: " + r.getString("First_Name"));
+					System.out.println("Last Name: " + r.getString("Last_Name"));
+					System.out.println("Date of Birth: " + r.getDate("Dateofbirth"));
+					System.out.println("Student's level " + r.getString("level_class"));
+					System.out.println("Student's Residency Status " + r.getString("residency_class"));
+					System.out.println("Student's GPA " + r.getFloat("GPA"));
+					connect.close(pstmt);
+					System.out.print("Press 0 to go back: ");
+					int choice = ip.nextInt();
+					if(choice == 0){
+						Login.admin_homepage(ip);
+					}
+					else{
+						System.out.println("Please enter 0 to go back.");
+					}
+				}
+				else{
+					System.out.println("Please enter correct Student Id.");
+				}
+			}
+			
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	// Method to view admin profile
 	public static void viewProfile(Scanner ip){
 		while(true){
 			System.out.println("**Your Profile**");
-			System.out.println("Press 0 to go back.");
 			System.out.println("First Name: " + AdminProfile.getInstance().getFirstname());
 			System.out.println("Last Name: " + AdminProfile.getInstance().getLastname());
 			System.out.println("Date of Birth: " + AdminProfile.getInstance().getDob());
 			System.out.println("Employee id: " + AdminProfile.getInstance().getEid());
+			System.out.print("Press 0 to go back: ");
 		
 			int n = ip.nextInt();
 			if(n == 0){
