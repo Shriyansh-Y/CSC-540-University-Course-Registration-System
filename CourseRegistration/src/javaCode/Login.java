@@ -33,22 +33,22 @@ public class Login {
 				// Getting the results of the queries.
 				rs1 = pstmt1.executeQuery();
 				rs2 =  pstmt2.executeQuery();
-				
+
 				// Checking if the user is an admin or a student.
 				// If the user is an admin.
 				if(rs1.next()){
 					System.out.println("Successful Admin Login!");
 					// Setting up the session for admin.
-					
+					AdminProfile.getInstance().setupProfile(rs1);
 					connect.close(pstmt1);
 					connect.close(pstmt2);
 					return 0;
 				}
-				// If the user is as student.
+				// If the user is a student.
 				else if(rs2.next()){
 					System.out.println("Successful Student Login!");
 					//Setting up the session for student.
-					
+					StudentProfile.getInstance().setupProfile(rs2);
 					connect.close(pstmt1);
 					connect.close(pstmt2);
 					return 1;
@@ -77,12 +77,11 @@ public class Login {
 			System.out.println("1. Admin/Student Login");
 			System.out.println("2. Exit");
 			System.out.print("Choice : ");
-			System.out.println(ip);
 			int choice = ip.nextInt();
 			switch (choice){
 			case 1:
 				int status = login_verify(ip);
-				if (status == 1){
+				if (status == 0){
 					admin_homepage(ip);
 				}
 				else
@@ -103,16 +102,95 @@ public class Login {
 		}
 	}
 	
-
-	
 	// Method to display options for an admin after successful login.
 	public static void admin_homepage(Scanner ip){
-		System.out.println("Hellllo admin.");
+		System.out.println("Hello admin.");
+		
+		while(true){
+			System.out.println("1. View Profile");
+			System.out.println("2. Enroll New Student");
+			System.out.println("3. View Student's Detail");
+			System.out.println("4. View/Add Courses");
+			System.out.println("5. View/Add Course Offering");
+			System.out.println("6. View/Approve Special Enrollment Requests");
+			System.out.println("7. Enforce Add/Drop Deadline");
+			System.out.println("8. Logout");
+			System.out.print("Choice: ");
+			
+			int choice = ip.nextInt();
+			switch(choice){
+			case 1:
+				AdminView.viewProfile(ip);
+				break;
+			case 2:
+				AdminView.enrollStudent(ip);
+				break;
+			case 3:
+				AdminView.viewStudentDetails(ip);
+				break;
+			case 4:
+				AdminView.viewaddCourses(ip);
+				break;
+			case 5:
+				AdminView.viewaddCourseOffering(ip);
+				break;
+			case 6:
+				////
+				AdminView.viewProfile(ip);
+				break;
+			case 7:
+				////
+				AdminView.viewProfile(ip);
+				break;
+			case 8:
+				AdminProfile.deleteInstance();
+				startPage(ip);
+				break;
+			default:
+				System.out.println("Please enter correct choice.");
+			}
+		}
+		
 	}
 	
 	// Method to display options for a student after successfull login.
 	public static void student_homepage(Scanner ip){
-		System.out.println("Hellllo student.");
+		System.out.println("Hello " + StudentProfile.getInstance().getFirstname());
+		while(true){
+			System.out.println("1. View/Edit Profile");
+			System.out.println("2. View/Enroll/Drop Courses");
+			System.out.println("3. View Pending Courses");
+			System.out.println("4. View Grades");
+			System.out.println("5. View/Pay Bills");
+			System.out.println("6. Logout");
+			System.out.print("Choice: ");
+			
+			int choice = ip.nextInt();
+			switch(choice){
+			case 1:
+				StudentView.viewProfile(ip);
+				break;
+			case 2:
+				StudentView.viewenrollCourses(ip);
+				break;
+			case 3:
+				StudentView.viewPendingCourses(ip);
+				break;
+			case 4:
+				StudentView.viewGrades(ip);
+				break;
+			case 5:
+				StudentView.viewpayBills(ip);
+				break;
+			case 6:
+				StudentProfile.deleteInstance();
+				startPage(ip);
+				break;
+			default:
+				System.out.println("Please enter correct choice.");
+			}
+		}	
+		
 		
 	}
 }

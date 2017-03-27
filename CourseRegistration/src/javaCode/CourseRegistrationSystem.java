@@ -12,5 +12,4 @@ public class CourseRegistrationSystem {
 		connect.getConnection();
 		Login.startPage(ip);
 	}
-
 }
