@@ -21,8 +21,54 @@ public class Courses {
 
 	// Method to view a Course Offering.
 	public static void viewCourseOffering(Scanner ip){
-		System.out.println("\n**View a Course Offering**");
-		
+//		System.out.println("\n**View a Course Offering**");
+//		
+//		try{
+//			while(true){
+//				System.out.print("Enter the Course ID:");
+//				String cid = ip.next().toUpperCase();
+//				
+//				// Object to hold the results of the queries.
+//				ResultSet r;
+//				
+//				// Object to hold the query.
+//				PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.view);
+//				pstmt.setInt(1, cid);
+//				// Execute the query.
+//				r = pstmt.executeQuery();
+//				
+//				if(r.next()){
+//					System.out.println("First Name: " + r.getString("First_Name"));
+//					System.out.println("Last Name: " + r.getString("Last_Name"));
+//					System.out.println("Date of Birth: " + r.getDate("Dateofbirth"));
+//					System.out.println("Student's level: " + r.getString("level_class"));
+//					System.out.println("Student's Residency Status: " + r.getString("residency_class"));
+//					System.out.println("Student's GPA: " + r.getFloat("GPA"));
+//					System.out.println("Student's phone: " + r.getString("phone"));
+//					System.out.println("Student's email id: " + r.getString("email"));
+//					connect.close(pstmt);
+//					System.out.print("Press 0 to go back: ");
+//					int choice = ip.nextInt();
+//					if(choice == 0){
+//						Login.admin_homepage(ip);
+//					}
+//					else{
+//						System.out.println("Please enter 0 to go back.");
+//					}
+//				}
+//				else{
+//					System.out.println("Please enter correct Student Id.");
+//				}
+//			}
+//			
+//		} catch (SQLException e){
+//			e.printStackTrace();
+//		}
+//		catch (Exception e){
+//			System.out.println("Invalid values entered. Please enter correct values.");
+//			System.out.println(e.getMessage());
+//		}
+//		
 	}
 	
 	// Method to add a Course Offering
@@ -36,28 +82,28 @@ public class Courses {
 			
 			System.out.print("Enter Course Id: ");
 			String cid = ip.next().toUpperCase();
-			System.out.print("Enter Faculty Name: ");
-			String firstName = ip.next();
-			String lastName = ip.next();
+			System.out.print("Enter Faculty Name for "+cid+" :");
+			String firstName = ip.next().toUpperCase();
+			String lastName = ip.next().toUpperCase();
 			String facultyName = firstName+" "+lastName;
 			System.out.println();
-			System.out.print("Enter Semester : ");
+			System.out.print("Enter Semester for "+cid+" :");
 			String semester;
 			
 			while(true){
-				System.out.println("Enter Semester(Select an option from below): \n 1. Fall \n 2. Spring \n 3. Summer");
+				System.out.println("Enter Semester(Select an option from below): \n 1. FALL \n 2. SPRING \n 3. SUMMER");
 				System.out.print("Your choice: ");
 				int choice = ip.nextInt();
 				if(choice == 1){
-					semester = "Fall";
+					semester = "FALL";
 					break;
 				}
 				else if(choice == 2){
-					semester = "Spring";
+					semester = "SPRING";
 					break;
 				}
 				else if(choice == 3){
-					semester = "Summer";
+					semester = "SUMMER";
 					break;
 				}
 				else{
@@ -66,12 +112,12 @@ public class Courses {
 				
 			}
 			
-			System.out.print("Enter Days of week for this course comma separated (MON,TUE,WED,THU,FRI): ");
-			String days = ip.next();
-			System.out.print("Enter course offering's start time (HH:MM:SS): ");
+			System.out.print("Enter Days of week for this course comma separated (MON,TUE,WED,THU,FRI) for "+cid+" :");
+			String days = ip.next().toUpperCase();
+			System.out.print("Enter course offering's start time (HH:MM:SS) for "+cid+" :");
 			String start = ip.next();
 			String start_time = "0 "+start;
-			System.out.print("Enter course offering's end time (HH:MM:SS): ");
+			System.out.print("Enter course offering's end time (HH:MM:SS) for "+cid+" :");
 			String end = ip.next();
 			String end_time = "0 "+end;
 			System.out.print("Enter class size for "+cid+" :");
