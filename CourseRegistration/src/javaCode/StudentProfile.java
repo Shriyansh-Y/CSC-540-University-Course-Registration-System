@@ -16,6 +16,9 @@ public class StudentProfile {
 	private String residency_class;
 	private float gpa;
 	private String email;
+	private String phone;
+	private String username;
+	private String dept;
 	
 	private static StudentProfile studentProfile;
 	
@@ -124,6 +127,36 @@ public class StudentProfile {
 	// Setting the email of student.
 	public void setEmail(String email){
 		this.email = email;
+	}	
+	
+	// Getiing the contact number of student.
+	public String getPhone(){
+		return phone;
+	}
+					
+	// Setting the contact number of student.
+	public void setPhonel(String phone){
+		this.phone = phone;
+	}	
+		
+	// Getiing the username of student.
+	public String getUsername(){
+		return username;
+	}
+					
+	// Setting the username of student.
+	public void setUsername(String username){
+		this.username = username;
+	}	
+
+	// Getiing the department of student.
+	public String getDepte(){
+		return dept;
+	}
+					
+	// Setting the department of student.
+	public void setDept(String dept){
+		this.dept = dept;
 	}		
 	
 	// Setting up the profile.
@@ -138,6 +171,9 @@ public class StudentProfile {
 			setLevelclass(r.getString("level_class"));
 			setResidencyclass(r.getString("residency_class"));
 			setEmail(r.getString("email"));
+			setPhonel(r.getString("phone"));
+			setUsername(r.getString("username"));
+			setDept(r.getString("dept"));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
