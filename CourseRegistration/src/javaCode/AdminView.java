@@ -138,9 +138,11 @@ public class AdminView {
 					System.out.println("First Name: " + r.getString("First_Name"));
 					System.out.println("Last Name: " + r.getString("Last_Name"));
 					System.out.println("Date of Birth: " + r.getDate("Dateofbirth"));
-					System.out.println("Student's level " + r.getString("level_class"));
-					System.out.println("Student's Residency Status " + r.getString("residency_class"));
-					System.out.println("Student's GPA " + r.getFloat("GPA"));
+					System.out.println("Student's level: " + r.getString("level_class"));
+					System.out.println("Student's Residency Status: " + r.getString("residency_class"));
+					System.out.println("Student's GPA: " + r.getFloat("GPA"));
+					System.out.println("Student's phone: " + r.getString("phone"));
+					System.out.println("Student's email id: " + r.getString("email"));
 					connect.close(pstmt);
 					System.out.print("Press 0 to go back: ");
 					int choice = ip.nextInt();
