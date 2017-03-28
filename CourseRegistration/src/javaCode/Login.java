@@ -19,15 +19,15 @@ public class Login {
 				PreparedStatement pstmt1 = connect.getConnection().prepareStatement(Queries.verify_login_admin);
 				PreparedStatement pstmt2 = connect.getConnection().prepareStatement(Queries.verify_login_student);
 				
-				System.out.println("Enter Username (Employee id / Student id): ");
-				int user = ip.nextInt();
+				System.out.println("Enter Username: ");
+				String user = ip.next();
 				System.out.println("Enter Password: ");
 				String passwd = ip.next();
 				
 				// Setting the username and password parameters in the query.
-				pstmt1.setInt(1, user);
+				pstmt1.setString(1, user);
 				pstmt1.setString(2, passwd);
-				pstmt2.setInt(1, user);
+				pstmt2.setString(1, user);
 				pstmt2.setString(2, passwd);
 				
 				// Getting the results of the queries.
