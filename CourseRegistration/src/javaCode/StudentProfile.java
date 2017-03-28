@@ -173,7 +173,7 @@ public class StudentProfile {
 			setEmail(r.getString("email"));
 			setPhonel(r.getString("phone"));
 			setUsername(r.getString("username"));
-			setDept(r.getString("dept"));
+			setDept(r.getString("department"));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
