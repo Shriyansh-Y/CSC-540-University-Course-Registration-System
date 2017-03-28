@@ -9,7 +9,9 @@ public final class Queries {
 
 	static final String add_course_offerings = "Insert into course_offering values(?,?,?,?,TO_DSINTERVAL(?),TO_DSINTERVAL(?),?,?,?)";
 	static final String verify_course_offering = "Select * from course_offering where COURSE_ID = ? and FACULTY_NAME = ?";
+	
 	static final String view_course_offerings = "Select * from course_offering where COURSE_ID = ?";
+	
 	static final String update_student_firstname = "Update Student Set First_Name = ? Where Student_id = ?";
 	static final String update_student_lastname = "Update Student Set Last_Name = ? Where Student_id = ?";
 	static final String update_student_phone = "Update Student Set phone = ? Where Student_id = ?";
@@ -17,5 +19,6 @@ public final class Queries {
 	static final String verify_update_student_firstname = "Select * From Student Where First_Name = ? and Student_id = ?";
 	static final String verify_update_student_lastname = "Select * From Student Where Last_Name = ? and Student_id = ?";
 	static final String verify_update_student_phone = "Select * From Student Where phone = ? and Student_id = ?";
-	static final String verify_update_student_email = "Select * From Student Where email = ? and Student_id = ?";	
+	static final String verify_update_student_email = "Select * From Student Where email = ? and Student_id = ?";
+	static final String verify_course_for_course_offering = "Select * from Courses where COURSE_ID = ?";
 }
