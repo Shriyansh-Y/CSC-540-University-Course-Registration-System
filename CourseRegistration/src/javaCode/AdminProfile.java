@@ -74,7 +74,7 @@ public class AdminProfile {
 		this.lastname = lastname;
 	}
 	
-	// Getiing the SSN of admin.
+	// Getting the SSN of admin.
 	public String getSsn(){
 		return ssn;
 	}
@@ -83,7 +83,7 @@ public class AdminProfile {
 	public void setSsn(String ssn){
 		this.ssn = ssn;
 	}
-	// Getiing the password of admin.
+	// Getting the password of admin.
 	public String getPassword(){
 		return password;
 	}
