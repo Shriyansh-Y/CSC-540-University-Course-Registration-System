@@ -21,12 +21,19 @@ public class AdminView {
 			System.out.println("\n**Enroll a student.**");
 			System.out.print("Enter StudentId: ");
 			int sid = ip.nextInt();
+			System.out.print("Enter Student's username: ");
+			String username = ip.next();
 			System.out.print("Enter Student's First Name: ");
 			String firstname = ip.next();
 			System.out.print("Enter Student's Last Name: ");
 			String lastname = ip.next();
 			System.out.print("Enter Student's email address: ");
 			String email = ip.next();
+			System.out.print("Enter phone number for a student: ");
+			String phone = ip.next();
+			System.out.print("Enter Department for student: ");
+			String dept = ip.next();
+			
 			
 			String level_class, residency_class;
 			while(true){
@@ -71,15 +78,19 @@ public class AdminView {
 			System.out.print("Enter Student's Date of Birth(YYYY-MM-DD): ");
 			String dob = ip.next();
 			
+			
 			pstmt.setInt(1, sid);
-			pstmt.setString(2, Integer.toString(sid));
-			pstmt.setString(3, firstname);
-			pstmt.setString(4, lastname);
-			pstmt.setString(5, email);
-			pstmt.setString(6, level_class);
-			pstmt.setString(7, residency_class);
-			pstmt.setFloat(8, (float) 0.0);
-			pstmt.setString(9, dob);
+			pstmt.setString(2, username);
+			pstmt.setString(3, Integer.toString(sid));
+			pstmt.setString(4, firstname);
+			pstmt.setString(5, lastname);
+			pstmt.setString(6, email);
+			pstmt.setString(7, phone);
+			pstmt.setString(8, dept);
+			pstmt.setString(9, level_class);
+			pstmt.setString(10, residency_class);
+			pstmt.setFloat(11, (float) 0.0);
+			pstmt.setString(12, dob);
 			
 			// Executing the insertion query.
 			rs = pstmt.executeQuery();
@@ -87,7 +98,7 @@ public class AdminView {
 			// Checking if the insertion of new student is successful or not.
 			ResultSet rs1;
 			PreparedStatement pstmt1 = connect.getConnection().prepareStatement(Queries.verify_login_student);
-			pstmt1.setInt(1, sid);
+			pstmt1.setString(1, username);
 			pstmt1.setString(2, Integer.toString(sid));
 			rs1 = pstmt1.executeQuery();
 			if(rs1.next()){
