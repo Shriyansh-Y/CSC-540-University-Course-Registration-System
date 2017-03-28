@@ -189,12 +189,54 @@ public class AdminView {
 	
 	// Method to view/add courses
 	public static void viewaddCourses(Scanner ip){
-		
+		while(true){
+			System.out.println("\n**View/Add Courses**");
+			System.out.println("Select appropriate option:");
+			System.out.println("0. Go to previous menu.");
+			System.out.println("1. View Courses.");
+			System.out.println("2. Add a Course.");
+			System.out.print("Your choice: ");
+			int choice = ip.nextInt();
+			switch(choice){
+			case 0:
+				Login.admin_homepage(ip);
+				break;
+			case 1:
+				Courses.viewCourse(ip);
+				break;
+			case 2:
+				Courses.addCourse(ip);
+				break;
+			default:
+				System.out.println("Please select a correct option.");
+			}
+		}
 	}
 	
 	// Method to view/add Course offering
 	public static void viewaddCourseOffering(Scanner ip){
-		
+		while(true){
+			System.out.println("\n**View/Add Course Offering**");
+			System.out.println("Select appropriate option:");
+			System.out.println("0. Go to previous menu.");
+			System.out.println("1. View Course Offering.");
+			System.out.println("2. Add a Course Offering.");
+			System.out.print("Your choice: ");
+			int choice = ip.nextInt();
+			switch(choice){
+			case 0:
+				Login.admin_homepage(ip);
+				break;
+			case 1:
+				Courses.viewCourseOffering(ip);
+				break;
+			case 2:
+				Courses.addCourseOffering(ip);
+				break;
+			default:
+				System.out.println("Please select a correct option.");
+			}
+		}	
 	}
 	
 }
