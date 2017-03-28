@@ -10,12 +10,22 @@ public class Courses {
 	
 	public static void viewCourse(Scanner ip){
         try{
+        	
             while(true){
                 System.out.println("\n**View Course Details**");
+                System.out.println("Enter 0 to go to main menu");
                 System.out.print("Enter the Course ID:");
                 String cid = ip.next();
+           
                 
-                
+                if(cid.equals(Integer.toString(0)))
+                {
+                	
+                	Login.admin_homepage(ip);
+             
+                }
+                else
+                {
                 ResultSet r;
                 
                 
@@ -51,6 +61,7 @@ public class Courses {
                 else{
                     System.out.println("Please enter correct Course Id.");
                 }
+               }
             }
             
         } catch (SQLException e){
