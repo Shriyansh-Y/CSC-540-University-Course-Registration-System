@@ -197,11 +197,43 @@ public class StudentView {
 	
 	// Method to view Pending courses
 	public static void viewPendingCourses(Scanner ip){
-		
+		while(true){
+			System.out.println("\n**View Courses and Status**");
+			System.out.print("Press 0 to go back to previous Menu: ");
+			int choice = ip.nextInt();
+			if(choice == 0){
+				Login.student_homepage(ip);
+			}
+			else{
+				System.out.println("Please select correct option.");
+			}
+		}
 	}
 	
 	// Method to display the grades of student.
 	public static void viewGrades(Scanner ip){
+		while(true){
+			System.out.println("\n**View Grades/GPA**");
+			System.out.println("Select an appropriate option: ");
+			System.out.println("0. Go back to previous Menu.");
+			System.out.println("1. Display Letter Grades.");
+			System.out.println("2. Display GPA");
+			System.out.print("Your Choice: ");
+			int choice = ip.nextInt();
+			if(choice == 0){
+				Login.student_homepage(ip);
+			}
+			else if(choice == 1){
+				
+			}
+			else if(choice == 2){
+				
+			}
+			else{
+				System.out.println("Please select a corret option");
+			}
+		}
+			
 		
 	}
 	
