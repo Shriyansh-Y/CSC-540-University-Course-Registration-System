@@ -239,6 +239,24 @@ public class StudentView {
 	
 	// Method to view/pay Bills.
 	public static void viewpayBills(Scanner ip){
-		
+		while(true){
+			System.out.println("\n**View/Pay Letter Bills**");
+			System.out.println("1. Display Student's Balance.");
+			System.out.println("2. Enter Amount");
+			System.out.print("Your Choice: ");
+			int choice = ip.nextInt();
+			if(choice == 0){
+				Login.student_homepage(ip);
+			}
+			else if(choice == 1){
+				//Displaying the student bill
+			}
+			else if(choice == 2){
+				//method involing bill module
+			}
+			else{
+				System.out.println("Please select a correct option");
+			}
+		}
 	}
 }
