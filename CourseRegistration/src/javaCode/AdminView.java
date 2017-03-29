@@ -105,7 +105,35 @@ public class AdminView {
 				System.out.println("\n~~New Student created Successfully~~\n");
 				connect.close(pstmt);
 				connect.close(pstmt1);
+				
+				// Updating the student's credit limits after successful enrollment.
+				ResultSet r;
+				PreparedStatement pstmt3 = connect.getConnection().prepareStatement(Queries.insert_credit_limit);
+				pstmt3.setInt(1, sid);
+				pstmt3.setInt(2, 0);
+				pstmt3.setInt(3, 0);
+				pstmt3.setInt(4, 0);
+				pstmt3.executeQuery();
+				connect.close(pstmt3);
+				
+				PreparedStatement pstmt4 = connect.getConnection().prepareStatement(Queries.select_credits);
+				pstmt4.setString(1, level_class);
+				pstmt4.setString(2, residency_class);
+				r = pstmt4.executeQuery();
+				
+				if(r.next()){
+				PreparedStatement pstmt5 = connect.getConnection().prepareStatement(Queries.update_credit_limit);
+				pstmt5.setString(1, r.getString("min_credits"));
+				pstmt5.setString(2, r.getString("max_credits"));
+				pstmt5.setInt(3, sid);
+				pstmt5.executeQuery();
+				
+				connect.close(pstmt3);
+				connect.close(pstmt4);
+				connect.close(pstmt5);
+				
 				Login.admin_homepage(ip);
+				}
 			}
 			
 		} catch (SQLException e){

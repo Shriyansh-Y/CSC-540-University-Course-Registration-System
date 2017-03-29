@@ -17,6 +17,11 @@ public final class Queries {
 	static final String verify_update_student_lastname = "Select * From Student Where Last_Name = ? and Student_id = ?";
 	static final String verify_update_student_phone = "Select * From Student Where phone = ? and Student_id = ?";
 	static final String verify_update_student_email = "Select * From Student Where email = ? and Student_id = ?";	
-	static final String add_new_course= "Insert into courses values(?,?,?,?,?,?,?,?)";
-	static final String view_course= "Select * from courses where course_id = ?";
+	static final String add_new_course = "Insert into courses values(?,?,?,?,?,?,?,?)";
+	static final String view_course = "Select * from courses where course_id = ?";
+	static final String insert_credit_limit = "Insert into STUDENTCREDIT Values(?,?,?,?)";
+	static final String update_credit_limit = "Update STUDENTCREDIT "
+			+ "Set STUDENTCREDIT.min_credit = ?, STUDENTCREDIT.max_credit = ? "
+			+ "where STUDENTCREDIT.Student_id = ?";
+	static final String select_credits = "Select min_credits, max_credits from Creditmap where level_class = ? and residency_class = ?";
 }

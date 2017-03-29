@@ -104,7 +104,7 @@ public class Login {
 	
 	// Method to display options for an admin after successful login.
 	public static void admin_homepage(Scanner ip){
-		System.out.println("Hello admin.");
+		System.out.println("\n**Hello admin.**");
 		
 		while(true){
 			System.out.println("1. View Profile");
@@ -155,7 +155,7 @@ public class Login {
 	
 	// Method to display options for a student after successfull login.
 	public static void student_homepage(Scanner ip){
-		System.out.println("Hello " + StudentProfile.getInstance().getFirstname());
+		System.out.println("\n**Hello " + StudentProfile.getInstance().getFirstname() + "**");
 		while(true){
 			System.out.println("1. View/Edit Profile");
 			System.out.println("2. View/Enroll/Drop Courses");
