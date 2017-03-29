@@ -49,7 +49,7 @@ public class StudentProfile {
 		this.sid = sid;
 	}
 	
-	// Getting the first name of student.
+	// Getting the date of birth of logged in student.
 	public Date getDob(){
 		return dob;
 	}
@@ -59,7 +59,7 @@ public class StudentProfile {
 		this.dob = dob;
 	}
 	
-	// Getiing the first name of student.
+	// Getting the first name of student.
 	public String getFirstname(){
 		return firstname;
 	}
@@ -69,17 +69,17 @@ public class StudentProfile {
 		this.firstname = firstname;
 	}
 	
-	// Getiing the first name of student.
+	// Getting the last name of student.
 	public String getLastname(){
 		return lastname;
 	}
 		
-	// Setting the first name of student.
+	// Setting the last name of student.
 	public void setLastname(String lastname){
 		this.lastname = lastname;
 	}
 	
-	// Getiing the level classification of student.
+	// Getting the level classification of student.
 	public String getLevelclass(){
 		return level_class;
 	}
@@ -89,7 +89,7 @@ public class StudentProfile {
 		this.level_class = level_class;
 	}
 	
-	// Getiing the password of student.
+	// Getting the password of student.
 	public String getPassword(){
 		return password;
 	}
@@ -99,7 +99,7 @@ public class StudentProfile {
 		this.password = password;
 	}	
 
-	// Getiing the residency classification of student.
+	// Getting the residency classification of student.
 	public String getResidencyclass(){
 		return residency_class;
 	}
@@ -109,7 +109,7 @@ public class StudentProfile {
 		this.residency_class = residency_class;
 	}
 	
-	// Getiing the gpa of student.
+	// Getting the gpa of student.
 	public float getGPA(){
 		return gpa;
 	}
@@ -119,7 +119,7 @@ public class StudentProfile {
 		this.gpa = gpa;
 	}
 	
-	// Getiing the email of student.
+	// Getting the email of student.
 	public String getEmail(){
 		return email;
 	}
@@ -129,7 +129,7 @@ public class StudentProfile {
 		this.email = email;
 	}	
 	
-	// Getiing the contact number of student.
+	// Getting the contact number of student.
 	public String getPhone(){
 		return phone;
 	}
@@ -139,7 +139,7 @@ public class StudentProfile {
 		this.phone = phone;
 	}	
 		
-	// Getiing the username of student.
+	// Getting the username of student.
 	public String getUsername(){
 		return username;
 	}
@@ -149,7 +149,7 @@ public class StudentProfile {
 		this.username = username;
 	}	
 
-	// Getiing the department of student.
+	// Getting the department of student.
 	public String getDepte(){
 		return dept;
 	}
