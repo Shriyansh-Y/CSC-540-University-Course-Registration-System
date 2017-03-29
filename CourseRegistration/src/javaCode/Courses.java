@@ -31,7 +31,7 @@ public class Courses {
 
 				System.out.print("Enter the Course ID:");
 				String cid = ip.next().toUpperCase();
-				
+				System.out.println();
 				pstmt.setString(1, cid);
 				// Execute the query.
 				r = pstmt.executeQuery();
@@ -45,8 +45,8 @@ public class Courses {
 					System.out.println("Faculty Name: " + r.getString("FACULTY_NAME"));
 					System.out.println("Semester: " + r.getString("SEMESTER"));
 					System.out.println("Days: " + r.getString("DAYS_OF_WEEK"));
-					System.out.println("Start Time: " + r.getString("START_TIME"));
-       				System.out.println("End Time: " + r.getString("END_TIME"));
+					System.out.println("Start Time: " + r.getString("START_TIME").substring(2));
+       				System.out.println("End Time: " + r.getString("END_TIME").substring(2));
 					System.out.println("Class Size: " + r.getInt("CLASS_SIZE"));
 					System.out.println("Number of students enrolled: " + r.getInt("NUMBER_OF_ENROLLED"));
 					System.out.println("Waitlist Size: " + r.getInt("WAITLIST_SIZE"));
