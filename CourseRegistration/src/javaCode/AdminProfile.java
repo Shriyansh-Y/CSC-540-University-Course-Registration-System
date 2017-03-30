@@ -44,7 +44,7 @@ public class AdminProfile {
 		this.eid = eid;
 	}
 	
-	// Getting the first name of admin.
+	// Getting the date of birth of admin.
 	public Date getDob(){
 		return dob;
 	}
@@ -64,12 +64,12 @@ public class AdminProfile {
 		this.firstname = firstname;
 	}
 	
-	// Getiing the first name of admin.
+	// Getiing the last name of admin.
 	public String getLastname(){
 		return lastname;
 	}
 		
-	// Setting the first name of admin.
+	// Setting the last name of admin.
 	public void setLastname(String lastname){
 		this.lastname = lastname;
 	}

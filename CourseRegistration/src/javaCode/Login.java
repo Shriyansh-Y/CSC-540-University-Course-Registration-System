@@ -19,9 +19,9 @@ public class Login {
 				PreparedStatement pstmt1 = connect.getConnection().prepareStatement(Queries.verify_login_admin);
 				PreparedStatement pstmt2 = connect.getConnection().prepareStatement(Queries.verify_login_student);
 				
-				System.out.println("Enter Username: ");
+				System.out.print("Enter Username: ");
 				String user = ip.next();
-				System.out.println("Enter Password: ");
+				System.out.print("Enter Password: ");
 				String passwd = ip.next();
 				
 				// Setting the username and password parameters in the query.
@@ -71,7 +71,7 @@ public class Login {
 	
 	// Method to display the initial menu options to the user.
 	public static void startPage(Scanner ip) throws NoSuchElementException{
-		System.out.println("*****Course Registration System*****");
+		System.out.println("\n*****Course Registration System*****");
 
 		while (true) {
 			System.out.println("1. Admin/Student Login");
@@ -104,7 +104,7 @@ public class Login {
 	
 	// Method to display options for an admin after successful login.
 	public static void admin_homepage(Scanner ip){
-		System.out.println("Hello admin.");
+		System.out.println("\n**Hello admin.**");
 		
 		while(true){
 			System.out.println("1. View Profile");
@@ -155,7 +155,7 @@ public class Login {
 	
 	// Method to display options for a student after successfull login.
 	public static void student_homepage(Scanner ip){
-		System.out.println("Hello " + StudentProfile.getInstance().getFirstname());
+		System.out.println("\n**Hello " + StudentProfile.getInstance().getFirstname() + "**");
 		while(true){
 			System.out.println("1. View/Edit Profile");
 			System.out.println("2. View/Enroll/Drop Courses");
