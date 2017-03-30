@@ -1,7 +1,12 @@
 DROP TABLE Student;
 DROP TABLE Admins;
-DROP TABLE CREDITCOST;
-DROP TABLE CREDITMAP
+DROP TABLE CREDITMAP;
+DROP TABLE STUDENTCREDIT;
+DROP TABLE GRADEMAP;
+DROP TABLE PREREQUISITE;
+DROP TABLE COURSE_OFFERING;
+DROP TABLE COURSES;
+
 
 CREATE TABLE Student(
   Student_id INT,
@@ -14,7 +19,7 @@ CREATE TABLE Student(
   department VARCHAR(10) NOT NULL,
   level_class VARCHAR(20) NOT NULL,
   residency_class VARCHAR(20) NOT NULL,
-  GPA NUMERIC NOT NULL,
+  GPA DECIMAL(3,2) NOT NULL,
   Dateofbirth DATE NOT NULL,
   CONSTRAINT student_pk PRIMARY KEY(Student_id),
   CONSTRAINT level_c CHECK(level_class in ('Undergraduate', 'Graduate')),
@@ -23,6 +28,7 @@ CREATE TABLE Student(
 
 CREATE TABLE Admins(
   Employee_id INT,
+  username VARCHAR(20) NOT NULL,
   psswd VARCHAR(50) NOT NULL,
   SSN VARCHAR(7) NOT NULL,
   First_Name VARCHAR(20) NOT NULL,
@@ -31,56 +37,176 @@ CREATE TABLE Admins(
   CONSTRAINT admin_pk PRIMARY KEY(Employee_id)
 );
 
-CREATE TABLE CREDITCOST(
-level_class VARCHAR(20),
-residency_class VARCHAR(20),
-Cost_per_credit INT
+CREATE TABLE COURSES(
+COURSE_ID VARCHAR(6),
+COURSE_NAME VARCHAR(50) NOT NULL,
+DEPT_NAME VARCHAR(10) NOT NULL,
+LEVEL_CLASS VARCHAR(10) NOT NULL,
+GPA_REQ NUMERIC,
+PRE_REQ_COURSES VARCHAR(50),
+SPCL_APPROVAL_REQ VARCHAR(3) NOT NULL,
+CREDITS INT NOT NULL,
+CONSTRAINT COURSE_PK PRIMARY KEY(COURSE_ID),
+CONSTRAINT LEVEL_CLASS_CHECK CHECK(LEVEL_CLASS IN ('Undergraduate', 'Graduate'))
+);
+
+CREATE TABLE COURSE_OFFERING(
+COURSE_ID VARCHAR(6),
+FACULTY_NAME VARCHAR(50),
+SEMESTER VARCHAR(10) NOT NULL,
+DAYS_OF_WEEK VARCHAR(20) NOT NULL,
+START_TIME interval day (0) to second(0) NOT NULL,
+END_TIME interval day (0) to second(0) NOT NULL,
+CLASS_SIZE INT NOT NULL,
+NUMBER_OF_ENROLLED INT NOT NULL,
+WAITLIST_SIZE INT NOT NULL,
+CONSTRAINT COURSE_OFFERING_PK PRIMARY KEY(COURSE_ID,FACULTY_NAME,SEMESTER),
+CONSTRAINT SEMESTER_CHECK CHECK(SEMESTER IN ('Fall','Spring','Summer'))
 );
 
 CREATE TABLE CREDITMAP(
 level_class VARCHAR(20),
 residency_class VARCHAR(20),
 min_credits INT,
-max_credits INT
+max_credits INT,
+Cost_per_credit INT
 );
+
+CREATE TABLE STUDENTCREDIT(
+Student_id INT,
+min_credit INT DEFAULT 0,
+max_credit INT DEFAULT 0,
+current_credit INT DEFAULT 0,
+tot_credit INT DEFAULT 0,
+CONSTRAINT credit_fk FOREIGN KEY (Student_id) REFERENCES STUDENT(Student_id) ON DELETE CASCADE
+);
+
+CREATE TABLE GRADEMAP(
+LETTER_GRADE VARCHAR(2),
+NUMBER_GRADE DECIMAL(3,2)
+);
+
+CREATE TABLE PREREQUISITE(
+COURSE_ID VARCHAR(10),
+PREREQUISITE_ID VARCHAR(10),
+LETTER_GRADE VARCHAR(5),
+NUMBER_GRADE DECIMAL(3,2),
+CONSTRAINT prereq_pk PRIMARY KEY(COURSE_ID, PREREQUISITE_ID)
+);
+
+SELECT *FROM PREREQUISITE;
+SELECT * FROM COURSES;
 
 SELECT * FROM Student;
 INSERT INTO Student
-VALUES (100 , 'asmotiwa','secret', 'Anuraag', 'Motiwale', 'asmotiwa@ncsu.edu','9199170656','CS','Graduate', 'International', 0.0, TO_DATE('1989-12-09','YYYY-MM-DD'));
+VALUES (100 , 'asmotiwa','secret', 'Anuraag', 'Motiwale', 'asmotiwa@ncsu.edu','9199170656','CS','Graduate', 'International', 
+0.0, TO_DATE('1989-12-09','YYYY-MM-DD'));
+
+INSERT INTO Student
+VALUES (1002 , 'asmoti','secret', 'Anuraag', 'Motiwale', 'asmotiwa@ncsu.edu','9199170656','CS','Undergraduate', 'International', 
+0.0, TO_DATE('1989-12-09','YYYY-MM-DD'));
 
 SELECT * FROM Admins;
 INSERT INTO Admins
-VALUES(101, 'admin1', 1234567, 'Abhishek', 'Singh', TO_DATE('1989-12-09','YYYY-MM-DD'));
+VALUES(101, 'admin1', 'admin1', 1234567, 'Abhishek', 'Singh', TO_DATE('1989-12-09','YYYY-MM-DD'));
 
 INSERT INTO Admins
 VALUES(102, 'admin2', 1234567, 'Parag', 'Nakhwa', TO_DATE('1989-12-09','YYYY-MM-DD'));
 
-INSERT INTO CREDITCOST
-VALUES('Graduate', 'In-State', 500);
-INSERT INTO CREDITCOST
-VALUES('Graduate', 'Out-State', 800);
-INSERT INTO CREDITCOST
-VALUES('Graduate', 'International', 1000);
-INSERT INTO CREDITCOST
-VALUES('Undergraduate', 'In-State', 400);
-INSERT INTO CREDITCOST
-VALUES('Undergraduate', 'Out-State', 700);
-INSERT INTO CREDITCOST
-VALUES('Underraduate', 'International', 900);
-
-SELECT * FROM CREDITCOST;
-
 INSERT INTO CREDITMAP
-VALUES('Graduate', 'In-State', 0, 9);
+VALUES('Graduate', 'In-State', 0, 9, 500);
 INSERT INTO CREDITMAP
-VALUES('Graduate', 'Out-State', 0, 9);
+VALUES('Graduate', 'Out-State', 0, 9, 800);
 INSERT INTO CREDITMAP
-VALUES('Graduate', 'International', 9, 9);
+VALUES('Graduate', 'International', 9, 9, 1000);
 INSERT INTO CREDITMAP
-VALUES('Undergraduate', 'In-State', 0, 12);
+VALUES('Undergraduate', 'In-State', 0, 12, 400);
 INSERT INTO CREDITMAP
-VALUES('Undergraduate', 'Out-State', 0, 12);
+VALUES('Undergraduate', 'Out-State', 0, 12, 700);
 INSERT INTO CREDITMAP
-VALUES('Underraduate', 'International', 9,12);
+VALUES('Underraduate', 'International', 9,12, 900);
 
 SELECT * FROM CREDITMAP;
+
+INSERT INTO GRADEMAP VALUES('A+', 4.33);
+INSERT INTO GRADEMAP VALUES('A', 4.00);
+INSERT INTO GRADEMAP VALUES('A-', 3.67);
+INSERT INTO GRADEMAP VALUES('B+', 3.33);
+INSERT INTO GRADEMAP VALUES('B', 3.00);
+INSERT INTO GRADEMAP VALUES('B-', 2.67);
+INSERT INTO GRADEMAP VALUES('C+', 2.33);
+INSERT INTO GRADEMAP VALUES('C', 2.00);
+INSERT INTO GRADEMAP VALUES('C-', 1.67);
+SELECT * FROM GRADEMAP;
+
+
+DELETE STUDENT;
+
+UPDATE STUDENT 
+SET FIRST_NAME = 'Amey'
+WHERE STUDENT_ID = 150;
+
+CREATE TABLE TENMP1(t_id INT);
+INSERT INTO TENMP1 VALUES(12);
+
+CREATE TABLE TENMP2(t_id INT);
+
+INSERT INTO STUDENTCREDIT(Student_id) VALUES(100);
+
+INSERT INTO Student
+VALUES (200 , 'ssingh','200', 's', 's', 'asmotiwa@ncsu.edu','9199170656','CS','Graduate', 'International', 
+0.0, TO_DATE('1989-12-09','YYYY-MM-DD'));
+
+SELECT * FROM STUDENTCREDIT;
+
+SELECT * FROM PREREQUISITE;
+
+SELECT PREREQUISITE_ID FROM PREREQUISITE WHERE COURSE_ID = 'CSC555';
+
+CREATE TABLE TEMP5(
+id1 int
+);
+SELECT * FROM TEMP5;
+DELETE FROM TEMP5 where id1 = 3;
+SELECT MIN(id1) FROM TEMP5;
+SELECT MAX(id1) FROM TEMP5;
+SELECT MAX(id1) - MIN(id1) FROM TEMP5;
+UPDATE TEMP5 SET id1 = id1 - 1 where id1 > 3;
+INSERT INTO TEMP5 VALUES(1);
+INSERT INTO TEMP5 VALUES(2);
+INSERT INTO TEMP5 VALUES(3);
+INSERT INTO TEMP5 VALUES(4);
+INSERT INTO TEMP5 VALUES(5);
+INSERT INTO TEMP5 VALUES(6);
+
+
+Update STUDENTCREDIT Set STUDENTCREDIT.min_credit = 9, STUDENTCREDIT.max_credit = 9 where STUDENTCREDIT.Student_id = 334;
+
+Select min_credits, max_credits from Creditmap where level_class = 'Graduate' and residency_class = 'International';
+
+/******************************TRIGGERS******************************/
+
+DROP TRIGGER update_student_credit;
+
+/*** Trigger for updating the student credit table ***/
+CREATE OR REPLACE TRIGGER update_student_credit
+AFTER INSERT ON STUDENT
+FOR EACH ROW
+DECLARE V1 INT;
+V2 INT;
+BEGIN
+INSERT INTO STUDENTCREDIT VALUES(:new.Student_id, 0, 0, 0, 0);
+
+SELECT CM.min_credits, CM.max_credits INTO V1,V2 from CREDITMAP CM 
+WHERE CM.LEVEL_CLASS = :new.level_class 
+and CM.RESIDENCY_CLASS = :new.residency_class; 
+
+UPDATE STUDENTCREDIT 
+SET min_credit = V1, max_credit = V2
+WHERE Student_id = :new.Student_id;
+
+EXCEPTION
+      WHEN no_data_found THEN
+        NULL;
+END;
+/
