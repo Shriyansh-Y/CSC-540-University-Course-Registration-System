@@ -102,8 +102,10 @@ public class Courses {
             System.out.println("\n*Add a course.**");
             System.out.print("Enter CourseID: ");
             String cid = ip.next();
+            ip.nextLine();
             System.out.print("Enter Course name: ");
-            String cname = ip.next();
+            
+            String cname = ip.nextLine();
             System.out.print("Enter Department Name: ");
             String dname = ip.next();
             
@@ -128,7 +130,7 @@ public class Courses {
             
             
             
-            System.out.print("Enter GPA requirement: ");
+            System.out.print("Enter GPA requirement (Enter 0 if no requirement): ");
             Float gpaReq = ip.nextFloat();
             
             System.out.print("Number of prerequisutes : ");
@@ -167,7 +169,7 @@ public class Courses {
             else
                 preqreCourses="No";
             
-            
+      
             
             String specialPermission;
             while(true){
@@ -185,12 +187,39 @@ public class Courses {
                 else{
                     System.out.println("Please select correct option.");
                 }
-                
             }
             
-            
-            System.out.print("Number of credits: ");
-            int credits = ip.nextInt();
+            int credits = 0;
+            String credit = "Yes";
+            while(true){
+            	System.out.println("Does this course have variable credit (Select an option from below): \n 1. Yes \n 2. No");
+            	System.out.print("Your choice: ");
+            	int varcredit = ip.nextInt();
+            	if(varcredit == 1){
+            		System.out.print("Enter minimum credit limit for this course: ");
+            		int mincredit = ip.nextInt();
+            		System.out.println("Enter maximum credit limit for this course: ");
+            		int maxcredit = ip.nextInt();
+            		
+            		PreparedStatement p = connect.getConnection().prepareStatement(Queries.insert_variable_credit);
+            		p.setString(1, cid);
+            		p.setInt(2, mincredit);
+            		p.setInt(3, maxcredit);
+            		p.executeQuery();
+            		
+            		credit = "Yes";
+            		break;
+            	}
+            	else if(varcredit == 2){
+            		System.out.print("Number of credits: ");
+            		credits = ip.nextInt();
+            		credit = "No";
+            		break;
+            	}
+            	else{
+            		System.out.println("Please select a correct option.");
+            	}
+            }
             
             
             pstmt.setString(1, cid);
@@ -200,7 +229,8 @@ public class Courses {
             pstmt.setFloat(5, gpaReq);
             pstmt.setString(6, preqreCourses);
             pstmt.setString(7, specialPermission);
-            pstmt.setInt(8, credits);
+            pstmt.setString(8, credit);
+            pstmt.setInt(9, credits);
             
             
             // Executing the insertion query.
@@ -215,7 +245,7 @@ public class Courses {
                 System.out.println("\n~~New Course successfully added!~~\n");
                 connect.close(pstmt);
                 connect.close(pstmt1);
-                Login.admin_homepage(ip);
+                AdminView.viewaddCourses(ip);
             }
             
         } catch (SQLException e){

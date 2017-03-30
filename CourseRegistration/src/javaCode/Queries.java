@@ -18,7 +18,7 @@ public final class Queries {
 	static final String verify_update_student_phone = "Select * From Student Where phone = ? and Student_id = ?";
 	static final String verify_update_student_email = "Select * From Student Where email = ? and Student_id = ?";
 	static final String verify_course_for_course_offering = "Select * from Courses where COURSE_ID = ?";
-	static final String add_new_course = "Insert into courses values(?,?,?,?,?,?,?,?)";
+	static final String add_new_course = "Insert into courses values(?,?,?,?,?,?,?,?,?)";
 	static final String view_course = "Select * from courses where course_id = ?";
 	static final String insert_credit_limit = "Insert into STUDENTCREDIT Values(?,?,?,?,?)";
 	static final String update_credit_limit = "Update STUDENTCREDIT "
@@ -28,4 +28,5 @@ public final class Queries {
 	static final String add_new_prereq= "Insert into prerequisite values(?,?,?,?)";
 	static final String get_grade = "Select number_grade From grademap Where letter_grade = ?";    
 	static final String get_prereqs = "Select prerequisite_id From prerequisite Where course_id = ?";
+	static final String insert_variable_credit = "Insert into VARIABLE_CEDIT_COURSES Values(?,?,?)";
 }
