@@ -9,14 +9,23 @@ import dbConnect.connect;
 public class Courses {
 	
 	public static void viewCourse(Scanner ip){
-
         try{
+            
             while(true){
                 System.out.println("\n**View Course Details**");
+                System.out.println("Enter 0 to go to main menu");
                 System.out.print("Enter the Course ID:");
                 String cid = ip.next();
+           
                 
-                
+                if(cid.equals(Integer.toString(0)))
+                {
+                    
+                    Login.admin_homepage(ip);
+             
+                }
+                else
+                {
                 ResultSet r;
                 
                 
@@ -32,11 +41,26 @@ public class Courses {
                     System.out.println("GPA requirement: " + r.getFloat("gpa_req"));
                     System.out.println("List of prerequisites: ");
                     String prereq=r.getString("pre_req_courses");
-                    String[] prereqs=prereq.split(",");
-                    for( int i=0;i<prereqs.length;i++)
+                    
+                    PreparedStatement pstmt_getprereqs = connect.getConnection().prepareStatement(Queries.get_prereqs);
+                    
+                    pstmt_getprereqs.setString(1, cid);
+                    ResultSet prereqs=pstmt_getprereqs.executeQuery();
+                    if(prereq.equals("Yes"))
                     {
-                        System.out.printf("%d) %s\n",i+1,prereqs[i]);
+                        int i=1;
+                        while(prereqs.next())
+                        {
+                            System.out.printf("Prerequiste %d : %s\n",i,prereqs.getString("prerequisite_id"));
+                            i++;
+                        }
+                        
                     }
+                    else
+                        System.out.println("Prerequisites : No prerequisites required.");
+
+                    
+                    
                     System.out.println("Special approval required: " + r.getString("spcl_approval_req"));
                     System.out.println("Number of credits: " + r.getInt("credits"));
                     connect.close(pstmt);
@@ -52,6 +76,7 @@ public class Courses {
                 else{
                     System.out.println("Please enter correct Course Id.");
                 }
+               }
             }
             
         } catch (SQLException e){
@@ -106,10 +131,43 @@ public class Courses {
             System.out.print("Enter GPA requirement: ");
             Float gpaReq = ip.nextFloat();
             
-            ip.nextLine();
+            System.out.print("Number of prerequisutes : ");
+            int prereqcount = ip.nextInt();
             
-            System.out.print("List of prerequisite courses (please enter required courses separated by comma): ");
-            String preqreCourses = ip.nextLine();
+            String preqreCourses;
+            if(prereqcount>0)
+            {
+                preqreCourses="Yes";
+                PreparedStatement pstmt_prereq = connect.getConnection().prepareStatement(Queries.add_new_prereq);
+                PreparedStatement pstmt_getgrade = connect.getConnection().prepareStatement(Queries.get_grade);
+                ResultSet rgrade;
+                
+                
+              
+                for(int i=1;i<=prereqcount;i++)
+                {
+                    System.out.printf("Enter prerequisite %d CourseID : ",i);
+                    String prereq=ip.next();
+                    System.out.print("Enter the given prerequisite's letter grade requirement : ");
+                    String gradereq=ip.next();
+                    
+                    pstmt_getgrade.setString(1, gradereq);
+                    rgrade=pstmt_getgrade.executeQuery();
+                    pstmt_prereq.setString(1,cid);
+                    pstmt_prereq.setString(2, prereq);
+                    pstmt_prereq.setString(3, gradereq);
+                    if(rgrade.next())
+                    pstmt_prereq.setFloat(4, rgrade.getFloat("number_grade"));
+                    
+                    pstmt_prereq.execute();
+                    
+                    
+                }
+            }
+            else
+                preqreCourses="No";
+            
+            
             
             String specialPermission;
             while(true){
@@ -169,6 +227,7 @@ public class Courses {
         }    
         
     }
+    
 
 	// Method to view a Course Offering.
 	public static void viewCourseOffering(Scanner ip){

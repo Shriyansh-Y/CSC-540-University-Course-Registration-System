@@ -25,4 +25,7 @@ public final class Queries {
 			+ "Set STUDENTCREDIT.min_credit = ?, STUDENTCREDIT.max_credit = ? "
 			+ "where STUDENTCREDIT.Student_id = ?";
 	static final String select_credits = "Select min_credits, max_credits from Creditmap where level_class = ? and residency_class = ?";
+	static final String add_new_prereq= "Insert into prerequisite values(?,?,?,?)";
+	static final String get_grade = "Select number_grade From grademap Where letter_grade = ?";    
+	static final String get_prereqs = "Select prerequisite_id From prerequisite Where course_id = ?";
 }
