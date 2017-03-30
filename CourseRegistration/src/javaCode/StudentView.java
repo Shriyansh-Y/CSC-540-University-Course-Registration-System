@@ -192,7 +192,26 @@ public class StudentView {
 	
 	// Method to view/enroll courses.
 	public static void viewenrollCourses(Scanner ip){
-		
+		while(true){
+			System.out.println("\n**View/Enroll/Drop Courses**");
+			System.out.print("Select an option: ");
+			System.out.println("0. To go back to previous Menu");
+			System.out.println("1. View / Enroll Courses.");
+			System.out.println("2. Drop a Course.");
+			int choice = ip.nextInt();
+			if(choice == 0){
+				Login.student_homepage(ip);
+			}
+			else if(choice == 1){
+				EnrollDropCourses.enrollCourses(ip);
+			}
+			else if(choice == 2){
+				EnrollDropCourses.dropCourse(ip);
+			}
+			else{
+				System.out.println("Please select correct option.");
+			}
+		}
 	}
 	
 	// Method to view Pending courses
@@ -233,8 +252,6 @@ public class StudentView {
 				System.out.println("Please select a corret option");
 			}
 		}
-			
-		
 	}
 	
 	// Method to view/pay Bills.
