@@ -344,8 +344,8 @@ public class Courses {
 			String semester;
 			
 			while(true){
-				System.out.println("Enter Semester(Select 1/2/3): \n 1. FALL \n 2. SPRING \n 3. SUMMER");
-				System.out.print("Your choice no.: ");
+				System.out.println("Enter Semester(Select from below): \n 1. FALL \n 2. SPRING");
+				System.out.print("Your choice: ");
 				int choice = ip.nextInt();
 				if(choice == 1){
 					semester = "FALL";
@@ -355,31 +355,26 @@ public class Courses {
 					semester = "SPRING";
 					break;
 				}
-				else if(choice == 3){
-					semester = "SUMMER";
-					break;
-				}
 				else{
 					System.out.println("Please select correct option.");
 				}
 				
 			}
 			
-			System.out.print("Enter Days of week for this course comma separated (MON,TUE,WED,THU,FRI) for "+cid+" :");
+			System.out.print("Enter Days of week for this course comma separated (MON,TUE,WED,THU,FRI) for "+cid+": ");
 			String days = ip.next().toUpperCase();
-			System.out.print("Enter course offering's start time (HH:MM:SS) for "+cid+" :");
+			System.out.print("Enter course offering's start time (HH:MM:SS) for "+cid+": ");
 			String start = ip.next();
 			String start_time = "0 "+start;
-			System.out.print("Enter course offering's end time (HH:MM:SS) for "+cid+" :");
+			System.out.print("Enter course offering's end time (HH:MM:SS) for "+cid+": ");
 			String end = ip.next();
 			String end_time = "0 "+end;
 			System.out.print("Enter class size for "+cid+" :");
 			int class_size = ip.nextInt();
-			System.out.print("Enter Number of students enrolled for "+cid+" :");
-			int num_enrolled = ip.nextInt();
 			System.out.print("Enter waitlist size for "+cid+" :");
 			int waitlist_size = ip.nextInt();
 			System.out.println("Confirm Adding the Course Offering for "+cid+" : \n 1: YES \n 2: No");
+			System.out.print("Your choice: ");
 			int choice = ip.nextInt();
 			if (choice == 2){
 				AdminView.viewaddCourseOffering(ip);
@@ -393,8 +388,9 @@ public class Courses {
 			pstmt.setString(5, start_time);
 			pstmt.setString(6, end_time);
 			pstmt.setInt(7, class_size);
-			pstmt.setInt(8, num_enrolled);
+			pstmt.setInt(8, 0);
 			pstmt.setInt(9, waitlist_size);
+			pstmt.setInt(10, 0);
 			
 			// Executing the insertion query.
 			rs = pstmt.executeQuery();

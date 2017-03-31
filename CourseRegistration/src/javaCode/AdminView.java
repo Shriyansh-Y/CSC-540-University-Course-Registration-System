@@ -114,7 +114,7 @@ public class AdminView {
 				pstmt3.setInt(3, 0);
 				pstmt3.setInt(4, 0);
 				pstmt3.setInt(5, 0);
-				pstmt3.executeQuery();
+				pstmt3.execute();
 				//connect.close(pstmt3);
 				
 				PreparedStatement pstmt4 = connect.getConnection().prepareStatement(Queries.select_credits);
@@ -122,14 +122,17 @@ public class AdminView {
 				pstmt4.setString(2, residency_class);
 				r22 = pstmt4.executeQuery();
 				
+				PreparedStatement pstmt6 = connect.getConnection().prepareStatement(Queries.insert_default_bill);
+				pstmt6.setInt(1, sid);
+				pstmt6.execute();
+				
 				if(r22.next()){
-					System.out.println("here" + r22.getString("min_credits"));
-					System.out.println("here" + r22.getString("max_credits"));
 					PreparedStatement pstmt5 = connect.getConnection().prepareStatement(Queries.update_credit_limit);
 					pstmt5.setString(1, r22.getString("min_credits"));
 					pstmt5.setString(2, r22.getString("max_credits"));
 					pstmt5.setInt(3, sid);
 					pstmt5.executeQuery();
+					
 					System.out.println("\n~~New Student created Successfully~~\n");
 					connect.close(pstmt3);
 					connect.close(pstmt4);

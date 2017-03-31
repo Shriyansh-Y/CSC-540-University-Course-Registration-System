@@ -194,10 +194,11 @@ public class StudentView {
 	public static void viewenrollCourses(Scanner ip){
 		while(true){
 			System.out.println("\n**View/Enroll/Drop Courses**");
-			System.out.print("Select an option: ");
+			System.out.println("Select an option: ");
 			System.out.println("0. To go back to previous Menu");
 			System.out.println("1. View / Enroll Courses.");
 			System.out.println("2. Drop a Course.");
+			System.out.print("Your choice: ");
 			int choice = ip.nextInt();
 			if(choice == 0){
 				Login.student_homepage(ip);
