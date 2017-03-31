@@ -35,4 +35,7 @@ public final class Queries {
 	static final String find_prerequisites = "Select * From Prerequisite where COURSE_ID = ?";
 	static final String check_prerequisites = "Select * from Enrollment where Semester = 'FALL' and Student_id = ? and Course_id = ?";
 	static final String get_current_credit = "Select * from STUDENTCREDIT WHERE Student_id = ?";
+	static final String get_variable_credit = "Select * FROM VARIABLE_CEDIT_COURSES WHERE COURSE_ID = ?";
+	static final String insert_special_request = "Insert into SPECIAL_PERMISSION VALUES(?,?,?,?,?,?,?,?)";
+	static final String check_permission_entry = "Select * FROM SPECIAL_PERMISSION WHERE student_id = ? and course_id = ? and faculty = ? and semester = ?";
 }

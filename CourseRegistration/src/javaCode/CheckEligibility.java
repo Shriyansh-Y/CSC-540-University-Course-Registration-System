@@ -62,8 +62,25 @@ public class CheckEligibility {
 	
 	// Method to check if special permission is required or not.
 	public static boolean special_permission(AvailableClasses ac){
-		
-		return true;
+		try{
+			// Fetching current credit of the student.
+			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.view_course);
+			p1.setString(1, ac.course_id);
+			ResultSet r1 = p1.executeQuery();
+			if(r1.next()){
+				System.out.println(r1.getString("SPCL_APPROVAL_REQ"));
+				if(r1.getString("SPCL_APPROVAL_REQ").equals("Yes")){
+					return false;
+				}
+			}
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
+		return true;		
 	}
 	
 	// Method to check conflicts in course timings.
@@ -80,17 +97,29 @@ public class CheckEligibility {
 			p1.setInt(1, StudentProfile.getInstance().getSid());
 			ResultSet r1 = p1.executeQuery();
 			if(r1.next()){
-				
 				// Fetching the credits of the course.
 				PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.view_course);
 				p2.setString(1, ac.course_id);
 				ResultSet r2 = p2.executeQuery();
 				if(r2.next()){
-					if((r1.getInt("CURRENT_CREDIT") + r2.getInt("CREDITS") > r1.getInt("MAX_CREDIT"))){
-						return false;
-					}		
+					if(r2.getString("VARIABLE_CREDIT").equals("Yes")){
+						PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.get_variable_credit);
+						p3.setString(1, ac.course_id);
+						ResultSet r3 = p3.executeQuery();
+						if(r3.next()){
+							if(((r1.getInt("CURRENT_CREDIT") + r3.getInt("MAX_CREDIT")) > r1.getInt("MAX_CREDIT"))){
+								System.out.println("The credit sum is: "+(r1.getInt("CURRENT_CREDIT") + r3.getInt("MAX_CREDIT")));
+								return false;
+							}
+						}
+					}
+					else if(r2.getString("VARIABLE_CREDIT").equals("No")){
+						if((r1.getInt("CURRENT_CREDIT") + r2.getInt("CREDITS") > r1.getInt("MAX_CREDIT"))){
+							return false;
+						}		
+					}
 				}
-			}	
+			}
 		} catch (SQLException e){
 			e.printStackTrace();
 		}

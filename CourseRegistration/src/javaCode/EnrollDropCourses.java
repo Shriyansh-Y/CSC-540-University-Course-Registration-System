@@ -3,6 +3,7 @@ package javaCode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 import dbConnect.*;
 
@@ -83,12 +84,11 @@ public class EnrollDropCourses {
 					}
 					
 					// Checking if credit limit is maintained.
-					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
-					if(credit_limit == false){
-						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
-
-						dropCourse(2,ip);
-					}
+//					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
+//					if(credit_limit == false){
+//						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
+//						dropCourse(2,ip);
+//					}
 //					else{
 //						System.out.println("Credit limit is maintained.");
 //					}
@@ -152,5 +152,45 @@ public class EnrollDropCourses {
 	// Method to send a special permission.
 	public static void send_special_request(AvailableClasses ac){
 		System.out.println("Sending special request.");
+		try{
+			// Inserting special request.
+			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.insert_special_request);
+			PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.check_permission_entry);
+			p2.setInt(1, StudentProfile.getInstance().getSid());
+			p2.setString(2, ac.course_id);
+			p2.setString(3, ac.fname);
+			p2.setString(4, ac.sem);
+			ResultSet r2 = p2.executeQuery();
+			if(r2.next()){
+				System.out.println("You have already sent a special request to enroll in this course.");
+				return;
+			}
+			
+			p1.setTimestamp(1, getCurrentTimeStamp());
+			p1.setInt(2, StudentProfile.getInstance().getSid());
+			p1.setString(3, ac.course_id);
+			p1.setString(4, ac.fname);
+			p1.setString(5, ac.sem);
+			p1.setString(6, "Pending");
+			p1.setString(7, "");
+			p1.setString(8, "");
+			p1.execute();
+			System.out.println("Special Permission has been sent to the Admin.");
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	
+	// Method to return a timestamp object.
+	private static java.sql.Timestamp getCurrentTimeStamp() {
+
+		java.util.Date today = new java.util.Date();
+		return new java.sql.Timestamp(today.getTime());
+
 	}
 }
