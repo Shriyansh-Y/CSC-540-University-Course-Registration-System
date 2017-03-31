@@ -58,9 +58,21 @@ public class EnrollDropCourses {
 						+cdata.get(k).days.format("%-12s", cdata.get(k).days)+cdata.get(k).start_time.format("%-15s", cdata.get(k).start_time)
 						+cdata.get(k).end_time);
 			}
-			System.out.print("Your choice: ");
-			int choice = ip.nextInt();
-			System.out.println(cdata.get(choice - 1).cname);
+			
+			while(true){
+				System.out.print("Your choice: ");
+				int choice = ip.nextInt();
+				if(choice > 0 && choice <= i){
+					System.out.println(cdata.get(choice - 1).cname);
+					break;
+				}
+				else
+					System.out.println("Please Enter correct option.");
+				}
+			
+			// Checking the prerequisites of the student if any.
+			
+			
 			break;
 			}
 		} catch (SQLException e){
