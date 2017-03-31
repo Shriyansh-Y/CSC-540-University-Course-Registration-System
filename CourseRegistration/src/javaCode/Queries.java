@@ -32,4 +32,7 @@ public final class Queries {
 	static final String insert_default_bill = "Insert into STUDENTBILL(Student_id) VALUES(?)";
 	static final String view_available_courses = "SELECT * FROM COURSE_OFFERING WHERE SEMESTER = ? and (NUMBER_OF_ENROLLED < CLASS_SIZE or WAITLISTED < WAITLIST_SIZE)";
 	static final String select_course_name = "Select COURSE_NAME FROM COURSES WHERE COURSE_ID = ?";
+	static final String find_prerequisites = "Select * From Prerequisite where COURSE_ID = ?";
+	static final String check_prerequisites = "Select * from Enrollment where Semester = 'FALL' and Student_id = ? and Course_id = ?";
+	static final String get_current_credit = "Select * from STUDENTCREDIT WHERE Student_id = ?";
 }

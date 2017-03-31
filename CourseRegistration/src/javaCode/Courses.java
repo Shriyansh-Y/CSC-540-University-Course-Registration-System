@@ -226,11 +226,11 @@ public class Courses {
             pstmt.setString(2, cname);
             pstmt.setString(3, dname);
             pstmt.setString(4, level_class);
-            pstmt.setFloat(5, gpaReq);
-            pstmt.setString(6, preqreCourses);
-            pstmt.setString(7, specialPermission);
-            pstmt.setString(8, credit);
-            pstmt.setInt(9, credits);
+            pstmt.setFloat(9, gpaReq);
+            pstmt.setString(5, preqreCourses);
+            pstmt.setString(6, specialPermission);
+            pstmt.setString(7, credit);
+            pstmt.setInt(8, credits);
             
             
             // Executing the insertion query.

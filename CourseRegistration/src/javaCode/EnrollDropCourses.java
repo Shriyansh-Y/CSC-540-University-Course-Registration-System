@@ -48,6 +48,7 @@ public class EnrollDropCourses {
 				StudentView.viewenrollCourses(ip);
 			}
 			System.out.println("Select the courses from below: ");
+			System.out.println("Press 0 to go back.");
 
 			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+
 					"Faculty".format("%-30s", "Faculty")+"Days".format("%-12s", "Days")+"Start time".format("%-15s", "Start time")+"End time");
@@ -62,6 +63,9 @@ public class EnrollDropCourses {
 			while(true){
 				System.out.print("Your choice: ");
 				int choice = ip.nextInt();
+				if(choice == 0){
+					StudentView.viewenrollCourses(ip);
+				}
 				if(choice > 0 && choice <= i){
 					
 					// Checking if any prerequisites required or not.
@@ -78,20 +82,23 @@ public class EnrollDropCourses {
 						EnrollDropCourses.enrollCourses(ip);
 					}
 					
+					// Checking if credit limit is maintained.
+					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
+					if(credit_limit == false){
+						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
+
+						dropCourse(2,ip);
+					}
+//					else{
+//						System.out.println("Credit limit is maintained.");
+//					}
+					
 					// Checking if the course has any conflicts with other courses.
 					boolean conflicts = CheckEligibility.check_schedule_conflicts(cdata.get(choice - 1));
 					if(conflicts == false){
 						System.out.println("The course timings are conflicting with other courses. Please select another course or drop the previously enrolled course.");
 						EnrollDropCourses.enrollCourses(ip);
 					}
-					
-					// Checking if credit limit is maintained.
-					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
-					if(credit_limit == false){
-						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
-						dropCourse(2,ip);
-					}
-					
 					
 					// Checking if special permission is required or not.
 					boolean special_permission = CheckEligibility.special_permission(cdata.get(choice - 1));
