@@ -35,4 +35,6 @@ public final class Queries {
 	static final String find_prerequisites = "Select * From Prerequisite where COURSE_ID = ?";
 	static final String check_prerequisites = "Select * from Enrollment where Semester = 'FALL' and Student_id = ? and Course_id = ?";
 	static final String get_current_credit = "Select * from STUDENTCREDIT WHERE Student_id = ?";
+	static final String check_schedule = "Select * from Enrollment where Semester = 'SPRING' and Student_id = ?";
+
 }
