@@ -63,7 +63,56 @@ public class EnrollDropCourses {
 				System.out.print("Your choice: ");
 				int choice = ip.nextInt();
 				if(choice > 0 && choice <= i){
-					System.out.println(cdata.get(choice - 1).cname);
+					
+					// Checking if any prerequisites required or not.
+					boolean prereq = CheckEligibility.check_prerequisites(cdata.get(choice - 1));
+					if(prereq == false){
+						System.out.println("Prerequisites not met for this course. Please select another course.");
+						EnrollDropCourses.enrollCourses(ip);
+					}
+					
+					// Checking overall gpa requirement.
+					boolean gpa_check = CheckEligibility.check_gpa(cdata.get(choice - 1));
+					if(gpa_check == false){
+						System.out.println("Overall GPA not met for this course. Please select another course.");
+						EnrollDropCourses.enrollCourses(ip);
+					}
+					
+					// Checking if the course has any conflicts with other courses.
+					boolean conflicts = CheckEligibility.check_schedule_conflicts(cdata.get(choice - 1));
+					if(conflicts == false){
+						System.out.println("The course timings are conflicting with other courses. Please select another course or drop the previously enrolled course.");
+						EnrollDropCourses.enrollCourses(ip);
+					}
+					
+					// Checking if credit limit is maintained.
+					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
+					if(credit_limit == false){
+						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
+						dropCourse(2,ip);
+					}
+					
+					
+					// Checking if special permission is required or not.
+					boolean special_permission = CheckEligibility.special_permission(cdata.get(choice - 1));
+					if(special_permission == false){
+						System.out.println("This course requires special permission from the admin.");
+						while(true){
+							System.out.println("Do you want to send a special request: \n1. Yes\n2. No");
+							System.out.print("Your choice: ");
+							int ck = ip.nextInt();
+							if(ck == 1){
+								send_special_request(cdata.get(choice - 1));
+								EnrollDropCourses.enrollCourses(ip);
+							}
+							else if(ck == 2){
+								EnrollDropCourses.enrollCourses(ip);
+							}
+							else{
+								System.out.println("Please Enter correct option.");
+							}
+						}
+					}	
 					break;
 				}
 				else
@@ -85,7 +134,16 @@ public class EnrollDropCourses {
 	}
 	
 	// Method to drop a course.
-	public static void dropCourse(Scanner ip){
+	public static void dropCourse(int opt, Scanner ip){
 		
+		System.out.println("You are in drop course method.");
+		if(opt == 1){
+			StudentView.viewenrollCourses(ip);
+		}
+	}
+	
+	// Method to send a special permission.
+	public static void send_special_request(AvailableClasses ac){
+		System.out.println("Sending special request.");
 	}
 }
