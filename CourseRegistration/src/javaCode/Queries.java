@@ -38,4 +38,9 @@ public final class Queries {
 	static final String get_variable_credit = "Select * FROM VARIABLE_CEDIT_COURSES WHERE COURSE_ID = ?";
 	static final String insert_special_request = "Insert into SPECIAL_PERMISSION VALUES(?,?,?,?,?,?,?,?)";
 	static final String check_permission_entry = "Select * FROM SPECIAL_PERMISSION WHERE student_id = ? and course_id = ? and faculty = ? and semester = ?";
+	static final String insert_in_enrollment = "Insert into enrollment values(?,?,?,?,?,?)";
+	static final String check_enrollment = "Select * from enrollment where student_id = ? and course_id = ? and semester = ? and faculty = ?";
+	static final String check_waitlist = "Select * from waitlist where student_id = ? and course_id = ? and semester = ? and faculty = ?";
+	static final String insert_in_waitlist = "Insert into waitlist values(?,?,?,?,?)";
+	static final String check_schedule = "Select * from Enrollment where Semester = 'SPRING' and Student_id = ?";
 }

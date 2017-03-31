@@ -12,10 +12,13 @@ public class AvailableClasses {
 	public int num_enrolled;
 	public int waitlist_size;
 	public int waitlisted;
+	public String rawstarttime;
+	public String rawendtime;
 	
 	public void set_start_time(String stime){
 		
 		String s12, s3, s4,s;
+		rawstarttime=stime;
 		s = "";
 		s12 = stime.substring(0,2);
 		s3 = stime.substring(3,4);
@@ -38,6 +41,7 @@ public class AvailableClasses {
 	public void set_end_time(String etime){
 		
 		String s12, s3, s4,s;
+		rawendtime=etime;
 		s = "";
 		s12 = etime.substring(0,2);
 		s3 = etime.substring(3,4);

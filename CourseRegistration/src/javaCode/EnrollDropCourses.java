@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 import dbConnect.*;
+import oracle.net.ns.AcceptPacket;
 
 public class EnrollDropCourses {
 	
@@ -69,6 +70,31 @@ public class EnrollDropCourses {
 				}
 				if(choice > 0 && choice <= i){
 					
+					
+					// Check if you have already been enrolled in the course.
+					PreparedStatement cp1 = connect.getConnection().prepareStatement(Queries.check_enrollment);
+					cp1.setInt(1, StudentProfile.getInstance().getSid());
+					cp1.setString(2, cdata.get(choice - 1).course_id);
+					cp1.setString(3, cdata.get(choice - 1).sem);
+					cp1.setString(4, cdata.get(choice - 1).fname);
+					ResultSet cr1 = cp1.executeQuery();
+					if(cr1.next()){
+						System.out.println("You have already been enrolled in this course. Please select a different course.");
+						EnrollDropCourses.enrollCourses(ip);
+					}
+					
+					// Checking if you have already been waitlisted for the course.
+					PreparedStatement cp2 = connect.getConnection().prepareStatement(Queries.check_waitlist);
+					cp2.setInt(1, StudentProfile.getInstance().getSid());
+					cp2.setString(2, cdata.get(choice - 1).course_id);
+					cp2.setString(3, cdata.get(choice - 1).sem);
+					cp2.setString(4, cdata.get(choice - 1).fname);
+					ResultSet cr2 = cp2.executeQuery();
+					if(cr2.next()){
+						System.out.println("You have already been waitlisted in this course. Please select a different course.");
+						EnrollDropCourses.enrollCourses(ip);
+					}
+										
 					// Checking if any prerequisites required or not.
 					boolean prereq = CheckEligibility.check_prerequisites(cdata.get(choice - 1));
 					if(prereq == false){
@@ -84,14 +110,14 @@ public class EnrollDropCourses {
 					}
 					
 					// Checking if credit limit is maintained.
-//					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
-//					if(credit_limit == false){
-//						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
-//						dropCourse(2,ip);
-//					}
-//					else{
-//						System.out.println("Credit limit is maintained.");
-//					}
+					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
+					if(credit_limit == false){
+						System.out.println("You are exceeding your courses maximum credit limit. Please drop a course to be eligible to enroll in other courses.");
+						dropCourse(2,ip);
+					}
+					else{
+						System.out.println("Credit limit is maintained.");
+					}
 					
 					// Checking if the course has any conflicts with other courses.
 					boolean conflicts = CheckEligibility.check_schedule_conflicts(cdata.get(choice - 1));
@@ -119,17 +145,26 @@ public class EnrollDropCourses {
 								System.out.println("Please Enter correct option.");
 							}
 						}
-					}	
+					}
+					
+					// Checking the class size limit.
+					boolean class_enroll = CheckEligibility.check_class_size(cdata.get(choice - 1));
+					if(class_enroll == false){
+						
+						// Enroll in wait list.
+						enroll_waitlist(StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
+								cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1,ip);
+						
+					}
+					else{
+						enroll_class(StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
+								cdata.get(choice - 1).sem, "F", 3,ip);
+					}
 					break;
 				}
 				else
 					System.out.println("Please Enter correct option.");
 				}
-			
-			// Checking the prerequisites of the student if any.
-			
-			
-			break;
 			}
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -138,6 +173,9 @@ public class EnrollDropCourses {
 			System.out.println("Invalid values entered. Please enter correct values.");
 			System.out.println(e.getMessage());
 		}
+		
+		
+		
 	}
 	
 	// Method to drop a course.
@@ -193,4 +231,68 @@ public class EnrollDropCourses {
 		return new java.sql.Timestamp(today.getTime());
 
 	}
+	
+	// Method to enroll in class.
+	public static void enroll_class(int student_id, String course_id, String faculty, String sem, String l_grade, int credit, Scanner ip){
+		try{
+			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.insert_in_enrollment);
+			p1.setInt(1, student_id);
+			p1.setString(2, course_id);
+			p1.setString(3, faculty);
+			p1.setString(4, sem);
+			p1.setString(5, l_grade);
+			p1.setInt(6, credit);
+			p1.executeQuery();
+			
+			// Check if you have already been enrolled in the course.
+			PreparedStatement cp1 = connect.getConnection().prepareStatement(Queries.check_enrollment);
+			cp1.setInt(1, student_id);
+			cp1.setString(2, course_id);
+			cp1.setString(3, sem);
+			cp1.setString(4, faculty);
+			ResultSet cr1 = cp1.executeQuery();
+			if(cr1.next()){
+				System.out.println("~~Successfull Enrollment in the Course "+ course_id+"~~");
+				EnrollDropCourses.enrollCourses(ip);
+			}
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	// Method to enroll in waitlist.
+	public static void enroll_waitlist(int student_id, String course_id, String faculty, String sem, int wait_num, Scanner ip){
+		try{
+			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.insert_in_waitlist);
+			p1.setInt(1, student_id);
+			p1.setString(2, course_id);
+			p1.setString(3, faculty);
+			p1.setString(4, sem);
+			p1.setInt(5, wait_num);
+			p1.executeQuery();
+			
+			// Check if you have already been enrolled in the course.
+			PreparedStatement cp1 = connect.getConnection().prepareStatement(Queries.check_waitlist);
+			cp1.setInt(1, student_id);
+			cp1.setString(2, course_id);
+			cp1.setString(3, sem);
+			cp1.setString(4, faculty);
+			ResultSet cr1 = cp1.executeQuery();
+			if(cr1.next()){
+				System.out.println("~~Successfully Waitlisted in the Course "+ course_id+"~~");
+				EnrollDropCourses.enrollCourses(ip);
+			}
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
+	}
+	
 }
