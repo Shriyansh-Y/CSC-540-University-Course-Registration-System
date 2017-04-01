@@ -10,7 +10,7 @@ public class Courses {
 	
 	public static void viewCourse(Scanner ip){
         try{
-        	
+
             while(true){
                 System.out.println("\n**View Course Details**");
                 System.out.println("Enter 0 to go to main menu");
@@ -20,8 +20,10 @@ public class Courses {
                 
                 if(cid.equals(Integer.toString(0)))
                 {
-                	
-                	Login.admin_homepage(ip);
+
+                    
+                    Login.admin_homepage(ip);
+
              
                 }
                 else
@@ -41,11 +43,26 @@ public class Courses {
                     System.out.println("GPA requirement: " + r.getFloat("gpa_req"));
                     System.out.println("List of prerequisites: ");
                     String prereq=r.getString("pre_req_courses");
-                    String[] prereqs=prereq.split(",");
-                    for( int i=0;i<prereqs.length;i++)
+                    
+                    PreparedStatement pstmt_getprereqs = connect.getConnection().prepareStatement(Queries.get_prereqs);
+                    
+                    pstmt_getprereqs.setString(1, cid);
+                    ResultSet prereqs=pstmt_getprereqs.executeQuery();
+                    if(prereq.equals("Yes"))
                     {
-                        System.out.printf("%d) %s\n",i+1,prereqs[i]);
+                        int i=1;
+                        while(prereqs.next())
+                        {
+                            System.out.printf("Prerequiste %d : %s\n",i,prereqs.getString("prerequisite_id"));
+                            i++;
+                        }
+                        
                     }
+                    else
+                        System.out.println("Prerequisites : No prerequisites required.");
+
+                    
+                    
                     System.out.println("Special approval required: " + r.getString("spcl_approval_req"));
                     System.out.println("Number of credits: " + r.getInt("credits"));
                     connect.close(pstmt);
@@ -87,8 +104,10 @@ public class Courses {
             System.out.println("\n*Add a course.**");
             System.out.print("Enter CourseID: ");
             String cid = ip.next();
+            ip.nextLine();
             System.out.print("Enter Course name: ");
-            String cname = ip.next();
+            
+            String cname = ip.nextLine();
             System.out.print("Enter Department Name: ");
             String dname = ip.next();
             
@@ -113,13 +132,46 @@ public class Courses {
             
             
             
-            System.out.print("Enter GPA requirement: ");
+            System.out.print("Enter GPA requirement (Enter 0 if no requirement): ");
             Float gpaReq = ip.nextFloat();
             
-            ip.nextLine();
+            System.out.print("Number of prerequisutes : ");
+            int prereqcount = ip.nextInt();
             
-            System.out.print("List of prerequisite courses (please enter required courses separated by comma): ");
-            String preqreCourses = ip.nextLine();
+            String preqreCourses;
+            if(prereqcount>0)
+            {
+                preqreCourses="Yes";
+                PreparedStatement pstmt_prereq = connect.getConnection().prepareStatement(Queries.add_new_prereq);
+                PreparedStatement pstmt_getgrade = connect.getConnection().prepareStatement(Queries.get_grade);
+                ResultSet rgrade;
+                
+                
+              
+                for(int i=1;i<=prereqcount;i++)
+                {
+                    System.out.printf("Enter prerequisite %d CourseID : ",i);
+                    String prereq=ip.next();
+                    System.out.print("Enter the given prerequisite's letter grade requirement : ");
+                    String gradereq=ip.next();
+                    
+                    pstmt_getgrade.setString(1, gradereq);
+                    rgrade=pstmt_getgrade.executeQuery();
+                    pstmt_prereq.setString(1,cid);
+                    pstmt_prereq.setString(2, prereq);
+                    pstmt_prereq.setString(3, gradereq);
+                    if(rgrade.next())
+                    pstmt_prereq.setFloat(4, rgrade.getFloat("number_grade"));
+                    
+                    pstmt_prereq.execute();
+                    
+                    
+                }
+            }
+            else
+                preqreCourses="No";
+            
+      
             
             String specialPermission;
             while(true){
@@ -137,21 +189,49 @@ public class Courses {
                 else{
                     System.out.println("Please select correct option.");
                 }
-                
             }
             
-            
-            System.out.print("Number of credits: ");
-            int credits = ip.nextInt();
+            int credits = 0;
+            String credit = "Yes";
+            while(true){
+            	System.out.println("Does this course have variable credit (Select an option from below): \n 1. Yes \n 2. No");
+            	System.out.print("Your choice: ");
+            	int varcredit = ip.nextInt();
+            	if(varcredit == 1){
+            		System.out.print("Enter minimum credit limit for this course: ");
+            		int mincredit = ip.nextInt();
+            		System.out.println("Enter maximum credit limit for this course: ");
+            		int maxcredit = ip.nextInt();
+            		
+            		PreparedStatement p = connect.getConnection().prepareStatement(Queries.insert_variable_credit);
+            		p.setString(1, cid);
+            		p.setInt(2, mincredit);
+            		p.setInt(3, maxcredit);
+            		p.executeQuery();
+            		
+            		credit = "Yes";
+            		break;
+            	}
+            	else if(varcredit == 2){
+            		System.out.print("Number of credits: ");
+            		credits = ip.nextInt();
+            		credit = "No";
+            		break;
+            	}
+            	else{
+            		System.out.println("Please select a correct option.");
+            	}
+            }
             
             
             pstmt.setString(1, cid);
             pstmt.setString(2, cname);
             pstmt.setString(3, dname);
             pstmt.setString(4, level_class);
-            pstmt.setFloat(5, gpaReq);
-            pstmt.setString(6, preqreCourses);
-            pstmt.setString(7, specialPermission);
+            pstmt.setFloat(9, gpaReq);
+            pstmt.setString(5, preqreCourses);
+            pstmt.setString(6, specialPermission);
+            pstmt.setString(7, credit);
             pstmt.setInt(8, credits);
             
             
@@ -167,7 +247,7 @@ public class Courses {
                 System.out.println("\n~~New Course successfully added!~~\n");
                 connect.close(pstmt);
                 connect.close(pstmt1);
-                Login.admin_homepage(ip);
+                AdminView.viewaddCourses(ip);
             }
             
         } catch (SQLException e){
@@ -179,57 +259,54 @@ public class Courses {
         }    
         
     }
+    
 
 	// Method to view a Course Offering.
 	public static void viewCourseOffering(Scanner ip){
-//		System.out.println("\n**View a Course Offering**");
-//		
-//		try{
-//			while(true){
-//				System.out.print("Enter the Course ID:");
-//				String cid = ip.next().toUpperCase();
-//				
-//				// Object to hold the results of the queries.
-//				ResultSet r;
-//				
-//				// Object to hold the query.
-//				PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.view);
-//				pstmt.setInt(1, cid);
-//				// Execute the query.
-//				r = pstmt.executeQuery();
-//				
-//				if(r.next()){
-//					System.out.println("First Name: " + r.getString("First_Name"));
-//					System.out.println("Last Name: " + r.getString("Last_Name"));
-//					System.out.println("Date of Birth: " + r.getDate("Dateofbirth"));
-//					System.out.println("Student's level: " + r.getString("level_class"));
-//					System.out.println("Student's Residency Status: " + r.getString("residency_class"));
-//					System.out.println("Student's GPA: " + r.getFloat("GPA"));
-//					System.out.println("Student's phone: " + r.getString("phone"));
-//					System.out.println("Student's email id: " + r.getString("email"));
-//					connect.close(pstmt);
-//					System.out.print("Press 0 to go back: ");
-//					int choice = ip.nextInt();
-//					if(choice == 0){
-//						Login.admin_homepage(ip);
-//					}
-//					else{
-//						System.out.println("Please enter 0 to go back.");
-//					}
-//				}
-//				else{
-//					System.out.println("Please enter correct Student Id.");
-//				}
-//			}
-//			
-//		} catch (SQLException e){
-//			e.printStackTrace();
-//		}
-//		catch (Exception e){
-//			System.out.println("Invalid values entered. Please enter correct values.");
-//			System.out.println(e.getMessage());
-//		}
-//		
+		System.out.println("\n**View a Course Offering**");
+		
+		try{
+				System.out.println();
+				ResultSet r;
+				PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.view_course_offerings);
+
+				System.out.print("Enter the Course ID:");
+				String cid = ip.next().toUpperCase();
+				System.out.println();
+				pstmt.setString(1, cid);
+				// Execute the query.
+				r = pstmt.executeQuery();
+				
+				if (!r.next()) {
+					System.out.println("No Course Offerings found.");
+				} else {
+					
+				do{
+					System.out.println("Course Id: " + r.getString("COURSE_ID"));
+					System.out.println("Faculty Name: " + r.getString("FACULTY_NAME"));
+					System.out.println("Semester: " + r.getString("SEMESTER"));
+					System.out.println("Days: " + r.getString("DAYS_OF_WEEK"));
+					System.out.println("Start Time: " + r.getString("START_TIME").substring(2));
+       				System.out.println("End Time: " + r.getString("END_TIME").substring(2));
+					System.out.println("Class Size: " + r.getInt("CLASS_SIZE"));
+					System.out.println("Number of students enrolled: " + r.getInt("NUMBER_OF_ENROLLED"));
+					System.out.println("Waitlist Size: " + r.getInt("WAITLIST_SIZE"));
+
+					System.out.println();
+					System.out.println();
+				}while(r.next());
+			  }
+				connect.close(pstmt);
+				AdminView.viewaddCourseOffering(ip);
+			
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
+		
 	}
 	
 	// Method to add a Course Offering
@@ -241,18 +318,35 @@ public class Courses {
 			ResultSet rs;
 			PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.add_course_offerings);
 			
+			String cid;
+			
+			ResultSet rs2;
+			PreparedStatement pstmt2 = connect.getConnection().prepareStatement(Queries.verify_course_for_course_offering);
 			System.out.print("Enter Course Id: ");
-			String cid = ip.next().toUpperCase();
+			cid = ip.next().toUpperCase();
+			pstmt2.setString(1,cid);
+			rs2 = pstmt2.executeQuery();
+			if (!rs2.next()){
+				System.out.println("\n~~Course ID entered is not valid~~\n");
+				connect.close(pstmt2);
+				addCourseOffering(ip);
+			}
+			else {
+			connect.close(pstmt2);
+			}
 			System.out.print("Enter Faculty Name for "+cid+" :");
-			String firstName = ip.next().toUpperCase();
-			String lastName = ip.next().toUpperCase();
-			String facultyName = firstName+" "+lastName;
-			System.out.println();
+//			String firstName = ip.nextLine().toUpperCase();
+//			String lastName = ip.next().toUpperCase();
+//			String facultyName = firstName+" "+lastName;
+//			System.out.println();
+			ip.nextLine();
+			
+			String facultyName = ip.nextLine().toUpperCase();
 			System.out.print("Enter Semester for "+cid+" :");
 			String semester;
 			
 			while(true){
-				System.out.println("Enter Semester(Select an option from below): \n 1. FALL \n 2. SPRING \n 3. SUMMER");
+				System.out.println("Enter Semester(Select from below): \n 1. FALL \n 2. SPRING");
 				System.out.print("Your choice: ");
 				int choice = ip.nextInt();
 				if(choice == 1){
@@ -263,31 +357,31 @@ public class Courses {
 					semester = "SPRING";
 					break;
 				}
-				else if(choice == 3){
-					semester = "SUMMER";
-					break;
-				}
 				else{
 					System.out.println("Please select correct option.");
 				}
 				
 			}
 			
-			System.out.print("Enter Days of week for this course comma separated (MON,TUE,WED,THU,FRI) for "+cid+" :");
+			System.out.print("Enter Days of week for this course comma separated (MON,TUE,WED,THU,FRI) for "+cid+": ");
 			String days = ip.next().toUpperCase();
-			System.out.print("Enter course offering's start time (HH:MM:SS) for "+cid+" :");
+			System.out.print("Enter course offering's start time (HH:MM:SS) for "+cid+": ");
 			String start = ip.next();
 			String start_time = "0 "+start;
-			System.out.print("Enter course offering's end time (HH:MM:SS) for "+cid+" :");
+			System.out.print("Enter course offering's end time (HH:MM:SS) for "+cid+": ");
 			String end = ip.next();
 			String end_time = "0 "+end;
 			System.out.print("Enter class size for "+cid+" :");
 			int class_size = ip.nextInt();
-			System.out.print("Enter Number of students enrolled for "+cid+" :");
-			int num_enrolled = ip.nextInt();
 			System.out.print("Enter waitlist size for "+cid+" :");
 			int waitlist_size = ip.nextInt();
-			
+			System.out.println("Confirm Adding the Course Offering for "+cid+" : \n 1: YES \n 2: No");
+			System.out.print("Your choice: ");
+			int choice = ip.nextInt();
+			if (choice == 2){
+				AdminView.viewaddCourseOffering(ip);
+			}
+			else if (choice == 1) {
 			
 			pstmt.setString(1, cid);
 			pstmt.setString(2, facultyName);
@@ -296,12 +390,13 @@ public class Courses {
 			pstmt.setString(5, start_time);
 			pstmt.setString(6, end_time);
 			pstmt.setInt(7, class_size);
-			pstmt.setInt(8, num_enrolled);
+			pstmt.setInt(8, 0);
 			pstmt.setInt(9, waitlist_size);
+			pstmt.setInt(10, 0);
 			
 			// Executing the insertion query.
 			rs = pstmt.executeQuery();
-
+			}
 			// Checking if the insertion of new course offering is successful or not.
 			ResultSet rs1;
 			PreparedStatement pstmt1 = connect.getConnection().prepareStatement(Queries.verify_course_offering);
@@ -314,6 +409,7 @@ public class Courses {
 				connect.close(pstmt1);
 				AdminView.viewaddCourseOffering(ip);
 			}
+			else {System.out.println("Error");}
 			
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -325,6 +421,7 @@ public class Courses {
 	}
 	
 
-}	
+}
+
 	
 	
