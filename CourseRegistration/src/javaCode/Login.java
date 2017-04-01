@@ -179,7 +179,7 @@ public class Login {
 				StudentView.viewGrades(ip);
 				break;
 			case 5:
-				StudentView.viewpayBills(ip);
+				StudentView.viewPayBills(ip);
 				break;
 			case 6:
 				StudentProfile.deleteInstance();

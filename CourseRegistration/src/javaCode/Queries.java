@@ -40,4 +40,6 @@ public final class Queries {
 	static final String select_course_semester = "Select SEMESTER from enrollment where COURSE_ID = ? and STUDENT_ID = ?";
 	static final String view_grade = "Select COURSE_ID,LETTER_GRADE,SEMESTER from ENROLLMENT where STUDENT_ID = ? AND LETTER_GRADE <> 'F' ";
 	static final String view_gpa = "Select GPA from STUDENT where STUDENT_ID = ? ";
+	static final String view_total_bill = "Select TOTAL_AMOUNT-AMOUNT_PAID from STUDENTBILL where STUDENT_ID = ? ";
+	static final String pay_bill = "Update STUDENTBILL Set AMOUNT_PAID = AMOUNT_PAID + ? Where STUDENT_ID = ? ";
 }
