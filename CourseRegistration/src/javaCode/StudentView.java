@@ -7,6 +7,7 @@ import dbConnect.connect;
 
 public class StudentView {
 	
+	
 	// Method to view/edit student profile.
 	public static void viewProfile(Scanner ip){
 		while(true){
@@ -198,6 +199,7 @@ public class StudentView {
 			System.out.println("0. To go back to previous Menu");
 			System.out.println("1. View / Enroll Courses.");
 			System.out.println("2. Drop a Course.");
+			System.out.println("3. View my courses.");
 			System.out.print("Your choice: ");
 			int choice = ip.nextInt();
 			if(choice == 0){
@@ -208,6 +210,9 @@ public class StudentView {
 			}
 			else if(choice == 2){
 				DropCourse.drop_course(ip);
+			}
+			else if(choice == 3){
+				EnrollDropCourses.viewMyCourses(ip);
 			}
 			else{
 				System.out.println("Please select correct option.");

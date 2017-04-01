@@ -22,6 +22,7 @@ public class AvailableClasses {
 		String s12, s3, s4,s;
 		rawstarttime=stime;
 		s = "";
+		rawstarttime=stime;
 		s12 = stime.substring(0,2);
 		s3 = stime.substring(3,4);
 		s4 = stime.substring(4);
@@ -45,6 +46,7 @@ public class AvailableClasses {
 		String s12, s3, s4,s;
 		rawendtime=etime;
 		s = "";
+		rawendtime=etime;
 		s12 = etime.substring(0,2);
 		s3 = etime.substring(3,4);
 		s4 = etime.substring(4);
@@ -62,4 +64,6 @@ public class AvailableClasses {
 		
 		this.end_time = s;
 	}
+	
+	
 }

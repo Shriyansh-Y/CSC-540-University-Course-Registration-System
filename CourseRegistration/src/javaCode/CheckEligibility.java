@@ -91,9 +91,13 @@ public class CheckEligibility {
 	}
 	
 	// Method to check conflicts in course timings.
+	
+	
+	
 	public static boolean check_schedule_conflicts(AvailableClasses ac){
 		try{
 			// Fetching current courses of the student.
+
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.check_schedule_enrolled);
 			p1.setInt(1, StudentProfile.getInstance().getSid());
 			p1.setInt(2, StudentProfile.getInstance().getSid());
@@ -106,22 +110,29 @@ public class CheckEligibility {
 			{
 				String days=r2.getString("Days_of_week");
 				List<String> daysarray=Arrays.asList(days.split(","));
+
+				
+				for(String d:daysarray)
+					System.out.println(d);
+			
+
 			
 			// ECST - Start time of Course you want to enroll
 			// ECET - End time of course you want to enroll
 			Date ECST=gettime(r2.getString("start_time"));
 			Date ECET=gettime(r2.getString("end_time"));
 
+
 			while(r1.next())
 			{	
 				System.out.println("The course is: " + r1.getString("Course_Id"));
 				String courseInHand=r1.getString("Course_id");
-
 				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.view_course_offerings);
 				p3.setString(1, courseInHand);
 				ResultSet rcourse = p3.executeQuery();
 				if(rcourse.next())
 				{
+
 				String courseInHandDays=rcourse.getString("Days_of_week");
 				String[] courseInHandDaysArray=courseInHandDays.split(",");
 				
@@ -155,6 +166,7 @@ public class CheckEligibility {
 		}
 		return true;
 	}
+	
 	
 	// Method to check credit limits.
 	public static boolean check_credit_limit(AvailableClasses ac){
@@ -198,6 +210,7 @@ public class CheckEligibility {
 	}
 	
 	
+
 	
 	// Method to check class size.
 	public static boolean check_class_size(AvailableClasses ac){
@@ -235,8 +248,14 @@ public class CheckEligibility {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		//System.out.println(date);
+		
 		return date;
 		
 	}
+	
+	
+	
+	
+
 }

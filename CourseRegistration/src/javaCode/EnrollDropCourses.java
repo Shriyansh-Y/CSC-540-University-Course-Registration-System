@@ -45,6 +45,8 @@ public class EnrollDropCourses {
 				ac.waitlisted = r1.getInt("WAITLISTED");		
 				cdata.add(ac);
 			}
+			
+			
 			if(i == 0){
 				System.out.println("No available courses found.");
 				StudentView.viewenrollCourses(ip);
@@ -289,6 +291,72 @@ public class EnrollDropCourses {
 			System.out.println("Invalid values entered. Please enter correct values.");
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public static void viewMyCourses(Scanner ip){
+		
+		try{
+				PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.view_enrolled_courses);
+				p1.setInt(1,StudentProfile.getInstance().getSid());
+				ResultSet r1 = p1.executeQuery();
+				int i = 0;
+				List<EnrolledClasses> edata = new ArrayList<EnrolledClasses>();
+				while(r1.next()){
+					i += 1;
+					EnrolledClasses ec = new EnrolledClasses();
+					String cid = r1.getString("COURSE_ID");
+					
+					PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.select_course_name);
+					PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.select_course_semester);
+
+					p2.setString(1, cid);
+					p3.setString(1, cid);
+
+					ResultSet r2 = p2.executeQuery();
+					ResultSet r3 = p3.executeQuery();
+
+					if(r2.next()){
+						ec.course_name = r2.getString("COURSE_NAME");
+					}
+					if(r3.next()){
+						ec.sem = r3.getString("SEMESTER");
+					}
+					ec.cid = cid;		
+					edata.add(ec);
+					
+					
+					connect.close(p2);
+					connect.close(p3);
+
+					
+				}
+				
+				
+				if(i == 0){
+					System.out.println("No enrolled courses found.");
+					StudentView.viewenrollCourses(ip);
+				}
+				System.out.println("My Courses : ");
+				//System.out.println("Press 0 to go back.");
+
+				System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+"Semester".format("%-30s", "Semester"));
+				
+				for(int k = 0; k < i; k++){
+					String ks = Integer.toString(k + 1) + ".";
+					System.out.println(ks.format("%-8s", ks) + edata.get(k).cid.format("%-15s", edata.get(k).cid) + edata.get(k).course_name.format("%-50s", edata.get(k).course_name) + edata.get(k).sem.format("%-30s", edata.get(k).sem));
+				}
+				
+			
+			connect.close(p1);
+			StudentView.viewenrollCourses(ip);
+		
+	} catch (SQLException e){
+		e.printStackTrace();
+	}
+	catch (Exception e){
+		System.out.println("Invalid values entered. Please enter correct values.");
+		System.out.println(e.getMessage());
+	}
 	}
 	
 	// Method to enroll in waitlist.
