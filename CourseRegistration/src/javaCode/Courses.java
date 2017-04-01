@@ -10,7 +10,7 @@ public class Courses {
 	
 	public static void viewCourse(Scanner ip){
         try{
-            
+
             while(true){
                 System.out.println("\n**View Course Details**");
                 System.out.println("Enter 0 to go to main menu");
@@ -20,8 +20,10 @@ public class Courses {
                 
                 if(cid.equals(Integer.toString(0)))
                 {
+
                     
                     Login.admin_homepage(ip);
+
              
                 }
                 else
