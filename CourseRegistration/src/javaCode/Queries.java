@@ -41,6 +41,8 @@ public final class Queries {
 	static final String insert_in_enrollment = "Insert into enrollment values(?,?,?,?,?,?)";
 	static final String check_enrollment = "Select * from enrollment where student_id = ? and course_id = ? and semester = ? and faculty = ?";
 	static final String check_waitlist = "Select * from waitlist where student_id = ? and course_id = ? and semester = ? and faculty = ?";
-	static final String insert_in_waitlist = "Insert into waitlist values(?,?,?,?,?)";
-	static final String check_schedule = "Select * from Enrollment where Semester = 'SPRING' and Student_id = ?";
+	static final String insert_in_waitlist = "Insert into waitlist values(?,?,?,?,?,?)";
+	static final String check_schedule_enrolled = "SELECT COURSE_ID FROM ENROLLMENT WHERE STUDENT_ID = ? and semester = 'SPRING' UNION ALL"
+			+ "SELECT COURSE_ID FROM WAITLIST WHERE STUDENT_ID = ? and semester = 'SPRING'";
+	static final String get_cid = "select * from ENROLLMENT WHERE student_id = ? and semester = 'SPRING'";
 }
