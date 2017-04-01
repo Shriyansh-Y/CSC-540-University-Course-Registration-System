@@ -41,7 +41,7 @@ public final class Queries {
 	static final String view_gpa = "Select GPA from STUDENT where STUDENT_ID = ? ";
 	static final String view_total_bill = "Select TOTAL_AMOUNT-AMOUNT_PAID from STUDENTBILL where STUDENT_ID = ? ";
 	static final String pay_bill = "Update STUDENTBILL Set AMOUNT_PAID = AMOUNT_PAID + ? Where STUDENT_ID = ? ";
-	static final String select_course_semester = "Select SEMESTER from course_offering where COURSE_ID = ?";
+	//static final String select_course_semester = "Select SEMESTER from course_offering where COURSE_ID = ?";
 	static final String get_variable_credit = "Select * FROM VARIABLE_CEDIT_COURSES WHERE COURSE_ID = ?";
 	static final String insert_special_request = "Insert into SPECIAL_PERMISSION VALUES(?,?,?,?,?,?,?,?)";
 	static final String check_permission_entry = "Select * FROM SPECIAL_PERMISSION WHERE student_id = ? and course_id = ? and faculty = ? and semester = ?";
