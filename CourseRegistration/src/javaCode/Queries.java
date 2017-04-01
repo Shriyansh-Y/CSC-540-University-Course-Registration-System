@@ -20,16 +20,16 @@ public final class Queries {
 	static final String verify_course_for_course_offering = "Select * from Courses where COURSE_ID = ?";
 	static final String add_new_course = "Insert into courses values(?,?,?,?,?,?,?,?,?)";
 	static final String view_course = "Select * from courses where course_id = ?";
-	static final String insert_credit_limit = "Insert into STUDENTCREDIT Values(?,?,?,?,?)";
-	static final String update_credit_limit = "Update STUDENTCREDIT "
-			+ "Set STUDENTCREDIT.min_credit = ?, STUDENTCREDIT.max_credit = ? "
+	static final String insert_credit_limit = "Insert into STUDENTCREDIT Values(?,?,?,?,?,?)";
+	static final String update_credit_limit_and_cost = "Update STUDENTCREDIT "
+			+ "Set STUDENTCREDIT.min_credit = ?, STUDENTCREDIT.max_credit = ?,STUDENTCREDIT.credit_cost = ? "
 			+ "where STUDENTCREDIT.Student_id = ?";
-	static final String select_credits = "Select min_credits, max_credits from Creditmap where level_class = ? and residency_class = ?";
+	static final String select_credits_and_cost = "Select min_credits, max_credits,cost_per_credit from Creditmap where level_class = ? and residency_class = ?";
 	static final String add_new_prereq= "Insert into prerequisite values(?,?,?,?)";
 	static final String get_grade = "Select number_grade From grademap Where letter_grade = ?";    
 	static final String get_prereqs = "Select prerequisite_id From prerequisite Where course_id = ?";
 	static final String insert_variable_credit = "Insert into VARIABLE_CEDIT_COURSES Values(?,?,?)";
-	static final String insert_default_bill = "Insert into STUDENTBILL(Student_id) VALUES(?)";
+	static final String insert_default_bill = "Insert into STUDENTBILL(Student_id,total_amount) VALUES(?,?)";
 	static final String view_available_courses = "SELECT * FROM COURSE_OFFERING WHERE SEMESTER = ? and (NUMBER_OF_ENROLLED < CLASS_SIZE or WAITLISTED < WAITLIST_SIZE)";
 	static final String select_course_name = "Select COURSE_NAME FROM COURSES WHERE COURSE_ID = ?";
 	static final String find_prerequisites = "Select * From Prerequisite where COURSE_ID = ?";
@@ -49,8 +49,7 @@ public final class Queries {
 	static final String check_enrollment = "Select * from enrollment where student_id = ? and course_id = ? and semester = ? and faculty = ?";
 	static final String check_waitlist = "Select * from waitlist where student_id = ? and course_id = ? and semester = ? and faculty = ?";
 	static final String insert_in_waitlist = "Insert into waitlist values(?,?,?,?,?,?)";
-	static final String check_schedule_enrolled = "SELECT COURSE_ID FROM ENROLLMENT WHERE STUDENT_ID = ? and semester = 'SPRING' UNION ALL"
-			+ "SELECT COURSE_ID FROM WAITLIST WHERE STUDENT_ID = ? and semester = 'SPRING'";
+	static final String check_schedule_enrolled = "SELECT COURSE_ID FROM ENROLLMENT WHERE STUDENT_ID = ? and semester = 'SPRING' UNION ALL SELECT COURSE_ID FROM WAITLIST WHERE STUDENT_ID = ? and semester = 'SPRING'";
 	static final String get_cid = "select * from ENROLLMENT WHERE student_id = ? and semester = 'SPRING'";
 	static final String get_enrolled = "Select * from ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and LETTER_GRADE = 'F'";
 	static final String get_waitlisted = "Select * from WAITLIST WHERE STUDENT_ID = ? and SEMESTER = 'SPRING'";
