@@ -211,7 +211,7 @@ public class StudentView {
 				EnrollDropCourses.enrollCourses(ip);
 			}
 			else if(choice == 2){
-				EnrollDropCourses.dropCourse(1, ip);
+				DropCourse.drop_course(ip);
 			}
 			else if(choice == 3){
 				EnrollDropCourses.viewMyCourses(ip);
