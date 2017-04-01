@@ -30,7 +30,8 @@ public final class Queries {
 	static final String get_prereqs = "Select prerequisite_id From prerequisite Where course_id = ?";
 	static final String insert_variable_credit = "Insert into VARIABLE_CEDIT_COURSES Values(?,?,?)";
 	static final String insert_default_bill = "Insert into STUDENTBILL(Student_id,total_amount) VALUES(?,?)";
-	static final String view_available_courses = "SELECT * FROM COURSE_OFFERING WHERE SEMESTER = ? and (NUMBER_OF_ENROLLED < CLASS_SIZE or WAITLISTED < WAITLIST_SIZE)";
+	static final String view_available_courses = "SELECT * FROM COURSE_OFFERING COF WHERE COF.SEMESTER = ? and (COF.NUMBER_OF_ENROLLED < COF.CLASS_SIZE or COF.WAITLISTED < COF.WAITLIST_SIZE) and COF.COURSE_ID " +
+			"IN(Select CO.COURSE_ID from COURSES CO where CO.LEVEL_CLASS = ?)";
 	static final String select_course_name = "Select COURSE_NAME FROM COURSES WHERE COURSE_ID = ?";
 	static final String find_prerequisites = "Select * From Prerequisite where COURSE_ID = ?";
 	static final String check_prerequisites = "Select * from Enrollment where Semester = 'FALL' and Student_id = ? and Course_id = ?";

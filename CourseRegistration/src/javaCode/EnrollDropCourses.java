@@ -18,6 +18,7 @@ public class EnrollDropCourses {
 			System.out.println("List of Available courses: ");
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.view_available_courses);
 			p1.setString(1, "SPRING");
+			p1.setString(2,StudentProfile.getInstance().getLevelclass());
 			ResultSet r1 = p1.executeQuery();
 			int i = 0;
 			List<AvailableClasses> cdata = new ArrayList<AvailableClasses>();
