@@ -14,10 +14,13 @@ public class AvailableClasses {
 	public int waitlisted;
 	public String rawstarttime;
 	public String rawendtime;
+	public String dropc;
+	public int wait_number;
 	
 	public void set_start_time(String stime){
 		
 		String s12, s3, s4,s;
+		rawstarttime=stime;
 		s = "";
 		rawstarttime=stime;
 		s12 = stime.substring(0,2);
@@ -41,6 +44,7 @@ public class AvailableClasses {
 	public void set_end_time(String etime){
 		
 		String s12, s3, s4,s;
+		rawendtime=etime;
 		s = "";
 		rawendtime=etime;
 		s12 = etime.substring(0,2);
