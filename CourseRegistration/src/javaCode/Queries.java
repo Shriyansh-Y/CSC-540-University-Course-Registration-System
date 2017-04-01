@@ -55,7 +55,10 @@ public final class Queries {
 	static final String get_enrolled = "Select * from ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and LETTER_GRADE = 'F'";
 	static final String get_waitlisted = "Select * from WAITLIST WHERE STUDENT_ID = ? and SEMESTER = 'SPRING'";
 	static final String drop_waitlist = "DELETE FROM WAITLIST WHERE STUDENT_ID = ? and COURSE_ID = ? and FACULTY = ? and SEMESTER = 'SPRING'";
-	static final String drop_enrolled = "";
+	static final String drop_enrolled = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ? and FACULTY = ?";
 	static final String update_waitlist_number = "UPDATE WAITLIST SET WAITLIST_NUMBER = WAITLIST_NUMBER - 1 WHERE WAITLIST_NUMBER > ? and COURSE_ID = ?";
+	static final String get_course_waitlist = "SELECT * FROM WAITLIST WHERE COURSE_ID = ? and SEMESTER = 'SPRING'";
+	static final String get_drop_course = "SELECT * FROM ENROLLMENT WHERE STUDENT_ID = ? and COURSE_ID = ? and SELESTER = 'SPRING'";
+	static final String drop_enrolled2 = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ?";
 	
 }
