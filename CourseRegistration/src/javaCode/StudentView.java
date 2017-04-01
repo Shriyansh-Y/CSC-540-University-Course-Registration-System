@@ -1,6 +1,8 @@
 package javaCode;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import dbConnect.connect;
@@ -250,22 +252,101 @@ public class StudentView {
 			}
 			else if(choice == 1){
 				
-			}
-			else if(choice == 2){
+				try{
+					
+					ResultSet r;
+					PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.view_grade);
+					pstmt.setInt(1, StudentProfile.getInstance().getSid());
+					r = pstmt.executeQuery();
+					List<GradeReport> gdata = new ArrayList<GradeReport>();
+					int i = 0;
+					while(r.next()){
+						i += 1;
+						GradeReport gr = new GradeReport();
+						String cid = r.getString("COURSE_ID");
+						
+						gr.cid = cid;
+						
+						PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.select_course_name);
+						p2.setString(1, cid);
+						ResultSet r2 = p2.executeQuery();
+						if(r2.next()){
+							gr.course_name = r2.getString("COURSE_NAME");
+						}
+						
+						gr.grade = r.getString("LETTER_GRADE");
+						gr.sem = r.getString("SEMESTER");
+						
+								
+						gdata.add(gr);	
+						
+						connect.close(p2);
+						
+					}
+					
+					
+					if(i == 0){
+						System.out.println("No grades found.");
+						Login.student_homepage(ip);
+					}
+					System.out.println("My Grade Report : ");
+					//System.out.println("Press 0 to go back.");
+
+					System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-30s", "Course Name")+"Semester".format("%-30s", "Semester")+"Grade".format("%-10s","Grade"));
+					
+					for(int k = 0; k < i; k++){
+						String ks = Integer.toString(k + 1) + ".";
+						System.out.println(ks.format("%-8s", ks) + gdata.get(k).cid.format("%-15s", gdata.get(k).cid) + gdata.get(k).course_name.format("%-30s", gdata.get(k).course_name) + gdata.get(k).sem.format("%-30s", gdata.get(k).sem) + gdata.get(k).grade.format("%-10s", gdata.get(k).grade));
+					}
+					
+				
+				connect.close(pstmt);
+				Login.student_homepage(ip);
+					
+				} catch (SQLException e){
+					e.printStackTrace();
+				}
+				catch (Exception e){
+					System.out.println("Invalid values entered. Please enter correct values.");
+					System.out.println(e.getMessage());
+				}
 				
 			}
+			else if(choice == 2){
+				try{
+					System.out.println("Your GPA is : ");
+					ResultSet r;
+					PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.view_gpa);
+					pstmt.setInt(1 , StudentProfile.getInstance().getSid());
+					r = pstmt.executeQuery();
+					if(r.next()){
+						System.out.println(r.getString("GPA"));
+					}
+					connect.close(pstmt);
+					Login.student_homepage(ip);
+					
+				} catch (SQLException e){
+					e.printStackTrace();
+				}
+				catch (Exception e){
+					System.out.println("Invalid values entered. Please enter correct values.");
+					System.out.println(e.getMessage());
+				}
+			}
 			else{
-				System.out.println("Please select a corret option");
+				System.out.println("Please select a correct option");
 			}
 		}
 	}
 	
 	// Method to view/pay Bills.
-	public static void viewpayBills(Scanner ip){
+	public static void viewPayBills(Scanner ip){
 		while(true){
 			System.out.println("\n**View/Pay Letter Bills**");
+			System.out.println("Select an appropriate option: ");
+			System.out.println("0. Go back to previous Menu.");
 			System.out.println("1. Display Student's Balance.");
-			System.out.println("2. Enter Amount");
+			System.out.println("2. Pay Bills.");
 			System.out.print("Your Choice: ");
 			int choice = ip.nextInt();
 			if(choice == 0){
@@ -273,9 +354,47 @@ public class StudentView {
 			}
 			else if(choice == 1){
 				//Displaying the student bill
+				try{
+					System.out.println("Your Total Bill is : ");
+					ResultSet r;
+					PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.view_total_bill);
+					pstmt.setInt(1 , StudentProfile.getInstance().getSid());
+					r = pstmt.executeQuery();
+					if(r.next()){
+						System.out.println(r.getString("TOTAL_AMOUNT-AMOUNT_PAID"));
+					}
+					connect.close(pstmt);
+					viewPayBills(ip);
+					
+				} catch (SQLException e){
+					e.printStackTrace();
+				}
+				catch (Exception e){
+					System.out.println("Invalid values entered. Please enter correct values.");
+					System.out.println(e.getMessage());
+				}
+				
 			}
 			else if(choice == 2){
-				//method involing bill module
+				//method involving bill module
+				try{
+					System.out.println("Enter the amount you want to pay : ");
+					float amt = ip.nextFloat();
+					PreparedStatement pstmt = connect.getConnection().prepareStatement(Queries.pay_bill);
+					pstmt.setFloat(1 , amt);
+					pstmt.setInt(2 , StudentProfile.getInstance().getSid());
+					pstmt.executeQuery();
+					System.out.println("Bill Pay Successful. Amount Paid is "+amt);
+					connect.close(pstmt);
+					viewPayBills(ip);
+					
+				} catch (SQLException e){
+					e.printStackTrace();
+				}
+				catch (Exception e){
+					System.out.println("Invalid values entered. Please enter correct values.");
+					System.out.println(e.getMessage());
+				}
 			}
 			else{
 				System.out.println("Please select a correct option");

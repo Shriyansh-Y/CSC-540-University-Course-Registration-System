@@ -311,6 +311,8 @@ public class EnrollDropCourses {
 
 					p2.setString(1, cid);
 					p3.setString(1, cid);
+					p3.setInt(2, StudentProfile.getInstance().getSid());
+
 
 					ResultSet r2 = p2.executeQuery();
 					ResultSet r3 = p3.executeQuery();

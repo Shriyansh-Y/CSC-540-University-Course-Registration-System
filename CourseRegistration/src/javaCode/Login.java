@@ -95,8 +95,7 @@ public class Login {
 				ip.close();
 				System.exit(0);
 			
-			default:
-				System.out.println("Pease enter correct choice.");
+			default: System.out.println("Please enter correct choice.");
 				
 			}
 		}
@@ -180,7 +179,7 @@ public class Login {
 				StudentView.viewGrades(ip);
 				break;
 			case 5:
-				StudentView.viewpayBills(ip);
+				StudentView.viewPayBills(ip);
 				break;
 			case 6:
 				StudentProfile.deleteInstance();
