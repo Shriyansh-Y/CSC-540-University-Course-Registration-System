@@ -14,6 +14,8 @@ public class AvailableClasses {
 	public int waitlisted;
 	public String rawstarttime;
 	public String rawendtime;
+	public String dropc;
+	public int wait_number;
 	
 	public void set_start_time(String stime){
 		

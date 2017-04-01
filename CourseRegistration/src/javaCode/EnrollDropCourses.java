@@ -183,7 +183,8 @@ public class EnrollDropCourses {
 									}
 								}
 								else{
-									EnrollDropCourses.enrollCourses(ip);
+									enroll_waitlist(StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
+											cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, "",ip);
 								}
 							}
 							else{
@@ -211,19 +212,6 @@ public class EnrollDropCourses {
 		
 		
 		
-	}
-	
-	// Method to drop a course.
-	public static void dropCourse(int opt, Scanner ip){
-		
-		System.out.println("Y\n** Drop a Course **");
-		System.out.println("List of Enrolled courses:");
-		
-		
-		
-		if(opt == 1){
-			StudentView.viewenrollCourses(ip);
-		}
 	}
 	
 	// Method to send a special permission.

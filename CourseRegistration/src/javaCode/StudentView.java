@@ -207,7 +207,7 @@ public class StudentView {
 				EnrollDropCourses.enrollCourses(ip);
 			}
 			else if(choice == 2){
-				EnrollDropCourses.dropCourse(1, ip);
+				DropCourse.drop_course(ip);
 			}
 			else{
 				System.out.println("Please select correct option.");

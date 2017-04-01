@@ -22,7 +22,6 @@ public class CheckEligibility {
 			// Fetching the prerequisites for the course.
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.find_prerequisites);
 			p1.setString(1, ac.course_id);
-			System.out.println(ac.course_id);
 			ResultSet r1 = p1.executeQuery();
 			while(r1.next()){
 				// Prerequisites found.
@@ -114,7 +113,8 @@ public class CheckEligibility {
 			Date ECET=gettime(r2.getString("end_time"));
 
 			while(r1.next())
-			{
+			{	
+				System.out.println("The course is: " + r1.getString("Course_Id"));
 				String courseInHand=r1.getString("Course_id");
 
 				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.view_course_offerings);
