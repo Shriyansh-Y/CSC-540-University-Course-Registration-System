@@ -419,9 +419,4 @@ public class Courses {
 			System.out.println(e.getMessage());
 		}	
 	}
-	
-
 }
-
-	
-	
