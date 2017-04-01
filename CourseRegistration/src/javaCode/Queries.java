@@ -57,5 +57,5 @@ public final class Queries {
 	static final String drop_waitlist = "DELETE FROM WAITLIST WHERE STUDENT_ID = ? and COURSE_ID = ? and FACULTY = ? and SEMESTER = 'SPRING'";
 	static final String drop_enrolled = "";
 	static final String update_waitlist_number = "UPDATE WAITLIST SET WAITLIST_NUMBER = WAITLIST_NUMBER - 1 WHERE WAITLIST_NUMBER > ? and COURSE_ID = ?";
-	
+	static final String special_permission_course_status ="SELECT COURSE_ID, FACULTY, SEMESTER, APPROVAL_STATUS FROM SPECIAL_PERMISSION WHERE STUDENT_ID=? and SEMESTER='SPRING'";
 }
