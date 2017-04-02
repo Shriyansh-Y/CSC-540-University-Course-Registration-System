@@ -112,7 +112,7 @@ public class EnrollDropCourses {
 					}
 					
 					// Checking if credit limit is maintained.
-					boolean credit_limit = CheckEligibility.check_credit_limit(cdata.get(choice - 1));
+					boolean credit_limit = CheckEligibility.check_credit_limit(0, cdata.get(choice - 1));
 					
 					
 					// Checking if the course has any conflicts with other courses.
@@ -177,7 +177,7 @@ public class EnrollDropCourses {
 									if(c1 == 0)
 									EnrollDropCourses.enrollCourses(ip);
 									else if(c1 - 1 <= t){
-										enroll_waitlist(StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
+										enroll_waitlist(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
 												cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, ar1.get(c1 - 1),ip);
 									}else{
 										System.out.println("Please select a correct option.");
@@ -185,7 +185,7 @@ public class EnrollDropCourses {
 									}
 								}
 								else{
-									enroll_waitlist(StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
+									enroll_waitlist(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
 											cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, "",ip);
 								}
 							}
@@ -195,7 +195,7 @@ public class EnrollDropCourses {
 						}	
 					}
 					else{
-						enroll_class(StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
+						enroll_class(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
 								cdata.get(choice - 1).sem, "F",3,ip);
 						EnrollDropCourses.enrollCourses(ip);
 					}
@@ -262,7 +262,7 @@ public class EnrollDropCourses {
 	}
 	
 	// Method to enroll in class.
-	public static void enroll_class(int student_id, String course_id, String faculty, String sem, String l_grade, int credit, Scanner ip){
+	public static void enroll_class(int ii, int student_id, String course_id, String faculty, String sem, String l_grade, int credit, Scanner ip){
 		try{
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.insert_in_enrollment);
 			p1.setInt(1, student_id);
@@ -281,8 +281,13 @@ public class EnrollDropCourses {
 			cp1.setString(4, faculty);
 			ResultSet cr1 = cp1.executeQuery();
 			if(cr1.next()){
+				if(ii == 1){
 				System.out.println("~~Successfull Enrollment in the Course "+ course_id+"~~");
 				EnrollDropCourses.enrollCourses(ip);
+				}
+				else{
+					return;
+				}
 			}
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -362,7 +367,7 @@ public class EnrollDropCourses {
 	}
 	
 	// Method to enroll in waitlist.
-	public static void enroll_waitlist(int student_id, String course_id, String faculty, String sem, int wait_num, String dropc,Scanner ip){
+	public static void enroll_waitlist(int ii, int student_id, String course_id, String faculty, String sem, int wait_num, String dropc,Scanner ip){
 		try{
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.insert_in_waitlist);
 			p1.setInt(1, student_id);
@@ -381,8 +386,13 @@ public class EnrollDropCourses {
 			cp1.setString(4, faculty);
 			ResultSet cr1 = cp1.executeQuery();
 			if(cr1.next()){
-				System.out.println("~~Successfully Waitlisted in the Course "+ course_id+"~~");
-				EnrollDropCourses.enrollCourses(ip);
+				if(ii == 0){
+					System.out.println("~~Successfully Waitlisted in the Course "+ course_id+"~~");
+					EnrollDropCourses.enrollCourses(ip);
+				}
+				else{
+					return;
+				}
 			}
 		} catch (SQLException e){
 			e.printStackTrace();

@@ -9,6 +9,7 @@ public final class Queries {
 	static final String add_course_offerings = "Insert into course_offering values(?,?,?,?,TO_DSINTERVAL(?),TO_DSINTERVAL(?),?,?,?,?)";
 	static final String verify_course_offering = "Select * from course_offering where COURSE_ID = ? and FACULTY_NAME = ?";
 	static final String view_course_offerings = "Select * from course_offering where COURSE_ID = ?";
+	static final String view_course_offerings1 = "Select * from course_offering where COURSE_ID = ? and SEMESTER = 'SPRING'";
 	static final String update_student_firstname = "Update Student Set First_Name = ? Where Student_id = ?";
 	static final String update_student_lastname = "Update Student Set Last_Name = ? Where Student_id = ?";
 	static final String update_student_phone = "Update Student Set phone = ? Where Student_id = ?";
@@ -60,5 +61,8 @@ public final class Queries {
 	static final String get_course_waitlist = "SELECT * FROM WAITLIST WHERE COURSE_ID = ? and SEMESTER = 'SPRING'";
 	static final String get_drop_course = "SELECT * FROM ENROLLMENT WHERE STUDENT_ID = ? and COURSE_ID = ? and SELESTER = 'SPRING'";
 	static final String drop_enrolled2 = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ?";
-	
+	static final String get_approvedreject_requests = "SELECT * FROM SPECIAL_PERMISSION WHERE APPROVAL_STATUS <> 'Pending'";
+	static final String get_pending_requests = "SELECT * FROM SPECIAL_PERMISSION WHERE APPROVAL_STATUS = 'Pending' ORDER BY CREATE_TIME";
+	static final String update_approval_request = "UPDATE SPECIAL_PERMISSION SET APPROVAL_STATUS = ?, ADMIN_NAME = ?, DATE_OF_APPROVAL = TO_DATE(?,'YYYY-MM-DD') "
+			+ "WHERE STUDENT_ID = ? and COURSE_ID = ? and SEMESTER = ? and FACULTY = ?";
 }
