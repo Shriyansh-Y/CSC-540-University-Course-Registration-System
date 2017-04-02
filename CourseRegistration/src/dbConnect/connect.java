@@ -28,7 +28,9 @@ public class connect {
 				// Establishing a connection to the database.
 				conn = DriverManager.getConnection(jdbcURL, username, password);
 				
+				
 				stmt = conn.createStatement();
+				// Displaying Success Message
 				System.out.println("Connection Successfull\n\n\n\n");
 
 			} catch (Throwable oops) {
