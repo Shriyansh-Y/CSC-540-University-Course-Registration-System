@@ -373,16 +373,17 @@ public class StudentView {
 					System.out.println("My Grade Report : ");
 					//System.out.println("Press 0 to go back.");
 
-					System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-30s", "Course Name")+"Semester".format("%-30s", "Semester")+"Grade".format("%-10s","Grade"));
+					System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-40s", "Course Name")+"Semester".format("%-20s", "Semester")+"Grade".format("%-10s","Grade"));
 					
 					for(int k = 0; k < i; k++){
 						String ks = Integer.toString(k + 1) + ".";
-						System.out.println(ks.format("%-8s", ks) + gdata.get(k).cid.format("%-15s", gdata.get(k).cid) + gdata.get(k).course_name.format("%-30s", gdata.get(k).course_name) + gdata.get(k).sem.format("%-30s", gdata.get(k).sem) + gdata.get(k).grade.format("%-10s", gdata.get(k).grade));
+						System.out.println(ks.format("%-8s", ks) + gdata.get(k).cid.format("%-15s", gdata.get(k).cid) + gdata.get(k).course_name.format("%-40s", gdata.get(k).course_name) + gdata.get(k).sem.format("%-20s", gdata.get(k).sem) + gdata.get(k).grade.format("%-10s", gdata.get(k).grade));
 					}
 					
 				
 				connect.close(pstmt);
-				Login.student_homepage(ip);
+				//Login.student_homepage(ip);
+				viewGrades(ip);
 					
 				} catch (SQLException e){
 					e.printStackTrace();
@@ -404,7 +405,8 @@ public class StudentView {
 						System.out.println(r.getString("GPA"));
 					}
 					connect.close(pstmt);
-					Login.student_homepage(ip);
+					//Login.student_homepage(ip);
+					viewGrades(ip);
 					
 				} catch (SQLException e){
 					e.printStackTrace();
