@@ -51,6 +51,7 @@ public class SpecialPermission {
 				if(r1.next()){
 					ac1.cname = r1.getString("COURSE_NAME");
 				}
+				ac1.sem = rv1.getString("SEMESTER");
 				ac1.course_id = rv1.getString("COURSE_ID");
 				ac1.sid = rv1.getInt("STUDENT_ID");
 				ac1.status = rv1.getString("APPROVAL_STATUS");
@@ -58,6 +59,35 @@ public class SpecialPermission {
 				ac1.ddate = rv1.getString("DATE_OF_APPROVAL");
 				
 				cdata1.add(ac1);
+			}
+			System.out.println("\nList of Approved/Rejected Requests: ");
+			if(cdata1.size() == 0){
+				System.out.println("No Requests at present.");
+			}
+			else{
+				System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Student Id".format("%-13s", "Student Id")+"Course Id".format("%-15s", "CourseId")+
+						"Course Name".format("%-50s", "Course Name")+"Semester".format("%-15s", "Semester")+"Status".format("%-20s", "Status")+
+						"Approved By".format("%-30s", "Approved By")+"Date Of Approval".format("%-20s", "Date Of Approval"));
+			
+				for(int i = 0; i < cdata1.size(); i++){
+					String is = Integer.toString(i + 1) + ".";
+					System.out.println(is.format("%-8s", is)+Integer.toString(cdata1.get(i).sid).format("%-13s", Integer.toString(cdata1.get(i).sid))+
+							cdata1.get(i).course_id.format("%-15s", cdata1.get(i).course_id)+cdata1.get(i).cname.format("%-50s", cdata1.get(i).cname)+
+							cdata1.get(i).sem.format("%-15s", cdata1.get(i).sem)+cdata1.get(i).status.format("%-20s", cdata1.get(i).status)+
+							cdata1.get(i).admin.format("%-30s", cdata1.get(i).admin)
+							+cdata1.get(i).ddate.substring(0, 11).format("%-20s", cdata1.get(i).ddate).substring(0, 11));	
+				
+				}
+				while(true){
+					System.out.print("\nPress 0 to go back: ");
+					int cc = ip.nextInt();
+					if(cc == 0){
+						viewPendingMenu(ip);
+					}
+					else{
+						System.out.println("Please enter correct option.");
+					}
+				}
 			}
 			
 		} catch (SQLException e){
@@ -162,9 +192,8 @@ public class SpecialPermission {
 										cdata2.get(choice - 1).fname, cdata2.get(choice - 1).sem, "F", 3, ip);
 								viewPendingMenu(ip);
 							}
-							// Check if the waitlist is available or not.
-						
 							
+							// Check if the waitlist is available or not.
 							else if(rcheck1.getInt("WAITLIST_SIZE") > rcheck1.getInt("WAITLISTED")){
 								EnrollDropCourses.enroll_waitlist(0, cdata2.get(choice - 1).sid, cdata2.get(choice - 1).course_id,
 										cdata2.get(choice - 1).fname, cdata2.get(choice - 1).sem, 
