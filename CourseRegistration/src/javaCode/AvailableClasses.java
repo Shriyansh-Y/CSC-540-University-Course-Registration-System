@@ -16,6 +16,10 @@ public class AvailableClasses {
 	public String rawendtime;
 	public String dropc;
 	public int wait_number;
+	public int sid;
+	public String status;
+	public String admin;
+	public String ddate;
 	
 	public void set_start_time(String stime){
 		

@@ -153,7 +153,7 @@ public class DropCourse {
 				ac1.fname = re2.getString("FACULTY");
 				ac1.wait_number = re2.getInt("WAITLIST_NUMBER");
 				ac1.dropc = re2.getString("DROP_COURSE");
-				boolean check_credit_limit = CheckEligibility.check_credit_limit(ac1);
+				boolean check_credit_limit = CheckEligibility.check_credit_limit(0, ac1);
 				if(check_credit_limit){
 					// Enroll the waitlisted student for the course.
 					PreparedStatement pe3 = connect.getConnection().prepareStatement(Queries.insert_in_enrollment);

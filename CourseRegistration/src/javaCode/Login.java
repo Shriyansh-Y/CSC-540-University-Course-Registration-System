@@ -134,8 +134,7 @@ public class Login {
 				AdminView.viewaddCourseOffering(ip);
 				break;
 			case 6:
-				////
-				AdminView.viewProfile(ip);
+				SpecialPermission.viewPendingMenu(ip);
 				break;
 			case 7:
 				////

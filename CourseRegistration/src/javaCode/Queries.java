@@ -9,6 +9,7 @@ public final class Queries {
 	static final String add_course_offerings = "Insert into course_offering values(?,?,?,?,TO_DSINTERVAL(?),TO_DSINTERVAL(?),?,?,?,?)";
 	static final String verify_course_offering = "Select * from course_offering where COURSE_ID = ? and FACULTY_NAME = ?";
 	static final String view_course_offerings = "Select * from course_offering where COURSE_ID = ?";
+	static final String view_course_offerings1 = "Select * from course_offering where COURSE_ID = ? and SEMESTER = 'SPRING'";
 	static final String update_student_firstname = "Update Student Set First_Name = ? Where Student_id = ?";
 	static final String update_student_lastname = "Update Student Set Last_Name = ? Where Student_id = ?";
 	static final String update_student_phone = "Update Student Set phone = ? Where Student_id = ?";
@@ -57,21 +58,20 @@ public final class Queries {
 	static final String drop_waitlist = "DELETE FROM WAITLIST WHERE STUDENT_ID = ? and COURSE_ID = ? and FACULTY = ? and SEMESTER = 'SPRING'";
 	static final String drop_enrolled = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ? and FACULTY = ?";
 	static final String update_waitlist_number = "UPDATE WAITLIST SET WAITLIST_NUMBER = WAITLIST_NUMBER - 1 WHERE WAITLIST_NUMBER > ? and COURSE_ID = ?";
-
 	static final String view_enrolled_courses_currsem = "Select * from Enrollment where Student_id = ? and semester = 'SPRING'";
 	static final String update_grade_enrollment="update enrollment set letter_grade=? where student_id=? and course_id=? ";
 	static final String update_grade_credit_enrollment="update enrollment set letter_grade=?, credit=? where student_id=? and course_id=? ";
 	static final String proc_call_update_grade="{call calgpa (?)}";
-
 	static final String special_permission_course_status ="SELECT COURSE_ID, FACULTY, SEMESTER, APPROVAL_STATUS FROM SPECIAL_PERMISSION WHERE STUDENT_ID=? and SEMESTER='SPRING'";
 	static final String get_course_waitlist = "SELECT * FROM WAITLIST WHERE COURSE_ID = ? and SEMESTER = 'SPRING'";
 	static final String get_drop_course = "SELECT * FROM ENROLLMENT WHERE STUDENT_ID = ? and COURSE_ID = ? and SELESTER = 'SPRING'";
 	static final String drop_enrolled2 = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ?";
-	
+	static final String get_approvedreject_requests = "SELECT * FROM SPECIAL_PERMISSION WHERE APPROVAL_STATUS <> 'Pending'";
+	static final String get_pending_requests = "SELECT * FROM SPECIAL_PERMISSION WHERE APPROVAL_STATUS = 'Pending' ORDER BY CREATE_TIME";
+	static final String update_approval_request = "UPDATE SPECIAL_PERMISSION SET APPROVAL_STATUS = ?, ADMIN_NAME = ?, DATE_OF_APPROVAL = TO_DATE(?,'YYYY-MM-DD') "
+			+ "WHERE STUDENT_ID = ? and COURSE_ID = ? and SEMESTER = ? and FACULTY = ?";
 	static final String check_if_deadline_already_enforced = "Select STATUS from DEADLINE_ENFORCED";
 	static final String set_deadline_enforced_true = "UPDATE DEADLINE_ENFORCED SET STATUS = 1";
 	static final String clear_waitlist_table = "DELETE FROM WAITLIST";
 	static final String drop_enrolled_students_unpaid_fees = "DELETE from enrollment where (STUDENT_ID IN (Select student_id from Studentbill where TOTAL_AMOUNT-AMOUNT_PAID > 0) and SEMESTER = 'SPRING')";
-
-
 }

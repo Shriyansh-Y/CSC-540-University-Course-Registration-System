@@ -167,11 +167,16 @@ public class CheckEligibility {
 	
 	
 	// Method to check credit limits.
-	public static boolean check_credit_limit(AvailableClasses ac){
+	public static boolean check_credit_limit(int ii, AvailableClasses ac){
 		try{
 			// Fetching current credit of the student.
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.get_current_credit);
-			p1.setInt(1, StudentProfile.getInstance().getSid());
+			if(ii == 0){
+				p1.setInt(1, StudentProfile.getInstance().getSid());
+			}
+			else{
+				p1.setInt(1, ac.sid);
+			}
 			ResultSet r1 = p1.executeQuery();
 			if(r1.next()){
 				// Fetching the credits of the course.
