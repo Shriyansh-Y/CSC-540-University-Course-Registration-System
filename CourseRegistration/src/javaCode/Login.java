@@ -138,7 +138,7 @@ public class Login {
 				break;
 			case 7:
 				////
-				AdminView.viewProfile(ip);
+				AdminView.viewEnforceDeadline(ip);
 				break;
 			case 8:
 				AdminProfile.deleteInstance();
