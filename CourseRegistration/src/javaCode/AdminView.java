@@ -1,8 +1,11 @@
 package javaCode;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import dbConnect.connect;
@@ -176,11 +179,15 @@ public class AdminView {
 					System.out.println("Student's phone: " + r.getString("phone"));
 					System.out.println("Student's email id: " + r.getString("email"));
 					connect.close(pstmt);
+					System.out.print("Press 1 to update grades for this student. ");
 					System.out.print("Press 0 to go back: ");
 					int choice = ip.nextInt();
 					if(choice == 0){
 						Login.admin_homepage(ip);
 					}
+					else if(choice==1){
+						enterGrades(ip,sid);
+					}	
 					else{
 						System.out.println("Please enter 0 to go back.");
 					}
@@ -207,7 +214,7 @@ public class AdminView {
 			System.out.println("Last Name: " + AdminProfile.getInstance().getLastname());
 			System.out.println("Date of Birth: " + AdminProfile.getInstance().getDob());
 			System.out.println("Employee id: " + AdminProfile.getInstance().getEid());
-			System.out.print("Press 0 to go back: ");
+			System.out.print("Press 0 to go back. ");
 		
 			int n = ip.nextInt();
 			if(n == 0){
@@ -269,6 +276,133 @@ public class AdminView {
 				System.out.println("Please select a correct option.");
 			}
 		}	
+	}
+	
+	public static void enterGrades(Scanner ip,int sid){
+		
+		try{
+			while(true)
+			{
+			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.view_enrolled_courses_currsem);
+			p1.setInt(1,sid);
+			ResultSet r1 = p1.executeQuery();
+			int i = 0;
+			List<EnrolledClasses> edata = new ArrayList<EnrolledClasses>();
+			while(r1.next()){
+				i += 1;
+				EnrolledClasses ec = new EnrolledClasses();
+				String cid = r1.getString("COURSE_ID");
+				ec.lgrade=r1.getString("LETTER_GRADE");
+				
+				PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.select_course_name);
+				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.select_course_semester);
+
+				p2.setString(1, cid);
+				p3.setString(1, cid);
+				p3.setInt(2, sid);
+
+
+				ResultSet r2 = p2.executeQuery();
+				ResultSet r3 = p3.executeQuery();
+
+				if(r2.next()){
+					ec.course_name = r2.getString("COURSE_NAME");
+				}
+				if(r3.next()){
+					ec.sem = r3.getString("SEMESTER");
+				}
+				ec.cid = cid;		
+				edata.add(ec);
+				
+				
+				connect.close(p2);
+				connect.close(p3);
+
+				
+			}
+			
+			
+			if(i == 0){
+				System.out.println("No enrolled courses found.");
+				Login.admin_homepage(ip);
+			}
+			System.out.println("Student's currently enrolled courses : ");
+			//System.out.println("Press 0 to go back.");
+
+			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-30s", "Course Name")+"Semester".format("%-30s", "Semester")+"Grade".format("%-30s", "Grade"));
+			
+			for(int k = 0; k < i; k++){
+				String ks = Integer.toString(k + 1) + ".";
+				System.out.println(ks.format("%-8s", ks) + edata.get(k).cid.format("%-15s", edata.get(k).cid) + edata.get(k).course_name.format("%-30s", edata.get(k).course_name) + edata.get(k).sem.format("%-30s", edata.get(k).sem)+ edata.get(k).lgrade.format("%-15s", edata.get(k).lgrade));
+			}
+			System.out.print("Enter grade for course index (press 0 to go back) : ");
+			int choice = ip.nextInt();
+			if(choice == 0){
+				Login.admin_homepage(ip);
+			}
+			else if(choice <= (edata.size()+1)){
+				PreparedStatement pfetchvarcredits = connect.getConnection().prepareStatement(Queries.view_course);
+				PreparedStatement pinsertgrade = connect.getConnection().prepareStatement(Queries.update_grade_enrollment);
+				PreparedStatement pinsertgradecredit = connect.getConnection().prepareStatement(Queries.update_grade_credit_enrollment);
+				CallableStatement proccall = connect.getConnection().prepareCall(Queries.proc_call_update_grade);
+				//System.out.println(edata.get(choice-1).cid);
+				pfetchvarcredits.setString(1, edata.get(choice-1).cid);
+				ResultSet rvarcredit=pfetchvarcredits.executeQuery();
+				String varcredindicator=null;
+				if(rvarcredit.next())
+				{
+					varcredindicator=rvarcredit.getString("variable_credit");
+				}
+				//System.out.println(varcredindicator);
+
+				if(varcredindicator.equals("No"))
+				{
+					System.out.println("Enter the letter grade for this course :");
+					String grd=ip.next();
+					pinsertgrade.setString(1, grd);
+					pinsertgrade.setInt(2, sid);
+					pinsertgrade.setString(3, edata.get(choice-1).cid);
+					pinsertgrade.executeQuery();
+					proccall.setInt(1, sid);
+					proccall.executeUpdate();
+					
+				}else
+				{
+					System.out.println("This is a variable credit course.");
+					System.out.println("Enter the letter grade for this course :");
+					String grd=ip.next();
+					System.out.println("Enter the number of credits to be awarded for this course :");
+					int crds=ip.nextInt();
+					pinsertgradecredit.setString(1, grd);
+					pinsertgradecredit.setInt(2, crds);
+					pinsertgradecredit.setInt(3, sid);
+					pinsertgradecredit.setString(4, edata.get(choice-1).cid);
+					pinsertgradecredit.executeQuery();
+					proccall.setInt(1, sid);
+					proccall.executeUpdate();
+					
+				}
+
+			}
+			else{
+				System.out.println("Please select correct option.");
+			}
+			
+			//check if course has variable credit
+			//if not simply ask for grade
+			//else ask for credit hours and grade
+		
+		connect.close(p1);
+			}
+	
+} catch (SQLException e){
+	e.printStackTrace();
+}
+catch (Exception e){
+	System.out.println("Invalid values entered. Please enter correct values.");
+	System.out.println(e.getMessage());
+}
+		
 	}
 	
 }
