@@ -20,13 +20,13 @@ public class connect {
 				Scanner sc = new Scanner(System.in);
 				
 				// Signing in the oracle database account.
-				//System.out.println("Enter Database Username - (UnityId)");
-				//String username = sc.next();
-				//System.out.println("Enter Database Password - (StudentId)");
-				//String password = sc.next();
+				System.out.println("Enter Database Username - (UnityId)");
+				String username = sc.next();
+				System.out.println("Enter Database Password - (StudentId)");
+				String password = sc.next();
 				
 				// Establishing a connection to the database.
-				conn = DriverManager.getConnection(jdbcURL, "asmotiwa", "200155847");
+				conn = DriverManager.getConnection(jdbcURL, username, password);
 				
 				stmt = conn.createStatement();
 				System.out.println("Connection Successfull\n\n\n\n");
