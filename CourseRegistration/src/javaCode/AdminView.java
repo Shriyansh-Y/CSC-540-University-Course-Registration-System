@@ -80,7 +80,8 @@ public class AdminView {
 			
 			System.out.print("Enter Student's Date of Birth(YYYY-MM-DD): ");
 			String dob = ip.next();
-			
+     		System.out.println("Enter Amount owed if any:");
+			int amt_owed = ip.nextInt();
 			
 			pstmt.setInt(1, sid);
 			pstmt.setString(2, username);
@@ -94,10 +95,9 @@ public class AdminView {
 			pstmt.setString(10, residency_class);
 			pstmt.setFloat(11, (float) 0.0);
 			pstmt.setString(12, dob);
-			
 			// Executing the insertion query.
-			pstmt.executeQuery();
-			connect.close(pstmt);
+			pstmt.execute();
+			//connect.close(pstmt);
 			// Checking if the insertion of new student is successful or not.
 			ResultSet rs1;
 			PreparedStatement pstmt1 = connect.getConnection().prepareStatement(Queries.verify_login_student);
@@ -117,25 +117,24 @@ public class AdminView {
 				pstmt3.setInt(3, 0);
 				pstmt3.setInt(4, 0);
 				pstmt3.setInt(5, 0);
-				pstmt3.execute();
-				//connect.close(pstmt3);
-				
-				PreparedStatement pstmt4 = connect.getConnection().prepareStatement(Queries.select_credits);
+				pstmt3.setInt(6, 0);
+				pstmt3.executeQuery();
+				connect.close(pstmt3);
+				PreparedStatement pstmt4 = connect.getConnection().prepareStatement(Queries.select_credits_and_cost);
 				pstmt4.setString(1, level_class);
 				pstmt4.setString(2, residency_class);
 				r22 = pstmt4.executeQuery();
-				
 				PreparedStatement pstmt6 = connect.getConnection().prepareStatement(Queries.insert_default_bill);
 				pstmt6.setInt(1, sid);
+				pstmt6.setInt(2, amt_owed);
 				pstmt6.execute();
-				
 				if(r22.next()){
-					PreparedStatement pstmt5 = connect.getConnection().prepareStatement(Queries.update_credit_limit);
+					PreparedStatement pstmt5 = connect.getConnection().prepareStatement(Queries.update_credit_limit_and_cost);
 					pstmt5.setString(1, r22.getString("min_credits"));
 					pstmt5.setString(2, r22.getString("max_credits"));
-					pstmt5.setInt(3, sid);
+					pstmt5.setString(3, r22.getString("cost_per_credit"));
+					pstmt5.setInt(4, sid);
 					pstmt5.executeQuery();
-					
 					System.out.println("\n~~New Student created Successfully~~\n");
 					connect.close(pstmt3);
 					connect.close(pstmt4);

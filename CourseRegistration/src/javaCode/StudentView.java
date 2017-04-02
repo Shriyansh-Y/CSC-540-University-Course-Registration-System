@@ -227,14 +227,95 @@ public class StudentView {
 		while(true){
 			System.out.println("\n**View Courses and Status**");
 			System.out.print("Press 0 to go back to previous Menu: ");
-			int choice = ip.nextInt();
-			if(choice == 0){
-				Login.student_homepage(ip);
+			try{
+				System.out.println("\n** Courses Status **");
+				//All the special permission courses
+				PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.special_permission_course_status);
+				p1.setInt(1, StudentProfile.getInstance().getSid());
+				ResultSet r1 = p1.executeQuery();
+					
+				ArrayList<SpecialPermissionCourses> spdata = new ArrayList<SpecialPermissionCourses>();
+				while(r1.next()){
+					SpecialPermissionCourses spc = new SpecialPermissionCourses();
+				    //Getting course name
+					PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.select_course_name);						p2.setString(1, r1.getString("COURSE_ID"));
+					ResultSet r2 = p2.executeQuery();	
+					if(r2.next()){
+						spc.cname = r2.getString("COURSE_NAME");
+					}
+					spc.course_id = r1.getString("COURSE_ID");
+					spc.sem = r1.getString("SEMESTER");
+					spc.fname = r1.getString("FACULTY");
+					spc.status = r1.getString("APPROVAL_STATUS");
+					spdata.add(spc);
+					}
+				if(spdata.size()>0){
+					System.out.println("List of Pending courses: ");
+					System.out.println("Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+
+							"Faculty".format("%-30s", "Faculty"));
+				    
+					for(int i = 0; i < spdata.size(); i++){
+						if(spdata.get(i).status.compareTo("Pending")==0){
+							System.out.println(spdata.get(i).course_id.format("%-15s", spdata.get(i).course_id)+
+									spdata.get(i).cname.format("%-50s", spdata.get(i).cname)+spdata.get(i).fname.format("%-30s", spdata.get(i).fname));	
+						}	
+					}
+				}
+				if(spdata.size()>0){
+					 System.out.println("List of Rejected courses: ");
+					 System.out.println("Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+
+							 "Faculty".format("%-30s", "Faculty"));
+				    
+					 for(int i = 0; i < spdata.size(); i++){
+						 if(spdata.get(i).status.compareTo("Rejected")==0){
+							 System.out.println(spdata.get(i).course_id.format("%-15s", spdata.get(i).course_id)+ spdata.get(i).cname.format("%-50s", spdata.get(i).cname)+spdata.get(i).fname.format("%-30s", spdata.get(i).fname));	
+						 }	
+					 }
+				}
+				//All Wait listed courses
+				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.get_waitlisted);
+			    p3.setInt(1, StudentProfile.getInstance().getSid());
+				ResultSet r3 = p3.executeQuery();
+				ArrayList<AvailableClasses> cdata1 = new ArrayList<AvailableClasses>();
+				while(r3.next()){
+					AvailableClasses ac = new AvailableClasses();
+				
+					PreparedStatement p4 = connect.getConnection().prepareStatement(Queries.select_course_name);
+					p4.setString(1, r3.getString("COURSE_ID"));
+					ResultSet r4 = p4.executeQuery();	
+					if(r4.next()){
+					ac.cname = r4.getString("COURSE_NAME");
+					}
+					ac.course_id = r3.getString("COURSE_ID");
+					ac.wait_number = r3.getInt("WAITLIST_NUMBER");
+					cdata1.add(ac);
+				}
+			if(cdata1.size() > 0)
+				System.out.println("List of Waitlisted course: ");
+				for(int t = 0; t < cdata1.size(); t++){
+					String wn=Integer.toString(cdata1.get(t).wait_number);
+					System.out.println(cdata1.get(t).course_id.format("%-15s", cdata1.get(t).course_id)+
+							cdata1.get(t).cname.format("%-50s", cdata1.get(t).cname)+(wn.format("%-50s",wn)));	
+				}
+				
+				
+					while(true){
+						System.out.print("Your choice: ");
+						int choice = ip.nextInt();
+						if(choice == 0){
+							StudentView.viewenrollCourses(ip);
+					}
+				}
+			}  catch (SQLException e){
+				e.printStackTrace();
 			}
-			else{
-				System.out.println("Please select correct option.");
+			catch (Exception e){
+				System.out.println("Invalid values entered. Please enter correct values.");
+				System.out.println(e.getMessage());
 			}
+		
 		}
+			
 	}
 	
 	// Method to display the grades of student.
@@ -292,16 +373,17 @@ public class StudentView {
 					System.out.println("My Grade Report : ");
 					//System.out.println("Press 0 to go back.");
 
-					System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-30s", "Course Name")+"Semester".format("%-30s", "Semester")+"Grade".format("%-10s","Grade"));
+					System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-40s", "Course Name")+"Semester".format("%-20s", "Semester")+"Grade".format("%-10s","Grade"));
 					
 					for(int k = 0; k < i; k++){
 						String ks = Integer.toString(k + 1) + ".";
-						System.out.println(ks.format("%-8s", ks) + gdata.get(k).cid.format("%-15s", gdata.get(k).cid) + gdata.get(k).course_name.format("%-30s", gdata.get(k).course_name) + gdata.get(k).sem.format("%-30s", gdata.get(k).sem) + gdata.get(k).grade.format("%-10s", gdata.get(k).grade));
+						System.out.println(ks.format("%-8s", ks) + gdata.get(k).cid.format("%-15s", gdata.get(k).cid) + gdata.get(k).course_name.format("%-40s", gdata.get(k).course_name) + gdata.get(k).sem.format("%-20s", gdata.get(k).sem) + gdata.get(k).grade.format("%-10s", gdata.get(k).grade));
 					}
 					
 				
 				connect.close(pstmt);
-				Login.student_homepage(ip);
+				//Login.student_homepage(ip);
+				viewGrades(ip);
 					
 				} catch (SQLException e){
 					e.printStackTrace();
@@ -323,7 +405,8 @@ public class StudentView {
 						System.out.println(r.getString("GPA"));
 					}
 					connect.close(pstmt);
-					Login.student_homepage(ip);
+					//Login.student_homepage(ip);
+					viewGrades(ip);
 					
 				} catch (SQLException e){
 					e.printStackTrace();
