@@ -403,6 +403,62 @@ catch (Exception e){
 	System.out.println(e.getMessage());
 }
 		
+}
+	public static void viewEnforceDeadline(Scanner ip){
+		System.out.println("Are you sure you want to enforce deadlines ?");
+		System.out.println("Press 0 to go back.");
+		System.out.println("1. YES");
+		System.out.println("2. NO");
+		int choice = ip.nextInt();
+		switch(choice){
+		case 0:
+			Login.admin_homepage(ip);
+			break;
+		case 1:
+			try{
+				PreparedStatement p0 = connect.getConnection().prepareStatement(Queries.check_if_deadline_already_enforced);
+				ResultSet r = p0.executeQuery();
+			  if(r.next()){
+				int status = r.getInt("STATUS");
+				if (status == 1)
+					{System.out.println("Deadline Already Enforced for this Semester");
+					 connect.close(p0);
+					 Login.admin_homepage(ip);
+					}
+				
+				else if(status == 0){
+				PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.set_deadline_enforced_true);
+				p1.execute();
+				PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.clear_waitlist_table);
+				p2.execute();
+				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.drop_enrolled_students_unpaid_fees);
+				p3.execute();
+				
+				connect.close(p1);
+				connect.close(p2);
+				connect.close(p3);
+				System.out.println("Deadline is enforced for Current Semester.");
+				Login.admin_homepage(ip);
+				
+				}
+			  }
+			} catch (SQLException e){
+				e.printStackTrace();
+			}
+			catch (Exception e){
+				System.out.println("Invalid values entered. Please enter correct values.");
+				System.out.println(e.getMessage());
+			}
+		
+			
+			break;
+		case 2:
+			System.out.println("Deadline Not Enforced.");
+			Login.admin_homepage(ip);
+			break;
+		default:
+			System.out.println("Please select a correct option.");
+		}
 	}
 	
 }
