@@ -68,6 +68,10 @@ public final class Queries {
 	static final String get_drop_course = "SELECT * FROM ENROLLMENT WHERE STUDENT_ID = ? and COURSE_ID = ? and SELESTER = 'SPRING'";
 	static final String drop_enrolled2 = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ?";
 	
+	static final String check_if_deadline_already_enforced = "Select STATUS from DEADLINE_ENFORCED";
+	static final String set_deadline_enforced_true = "UPDATE DEADLINE_ENFORCED SET STATUS = 1";
+	static final String clear_waitlist_table = "DELETE FROM WAITLIST";
+	static final String drop_enrolled_students_unpaid_fees = "DELETE from enrollment where (STUDENT_ID IN (Select student_id from Studentbill where TOTAL_AMOUNT-AMOUNT_PAID > 0) and SEMESTER = 'SPRING')";
 
 
 }

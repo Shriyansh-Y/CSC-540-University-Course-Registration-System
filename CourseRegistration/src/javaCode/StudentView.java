@@ -303,7 +303,7 @@ public class StudentView {
 						System.out.print("Your choice: ");
 						int choice = ip.nextInt();
 						if(choice == 0){
-							StudentView.viewenrollCourses(ip);
+							Login.student_homepage(ip);
 					}
 				}
 			}  catch (SQLException e){
