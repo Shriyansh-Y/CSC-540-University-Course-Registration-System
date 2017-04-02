@@ -18,6 +18,7 @@ public class EnrollDropCourses {
 			System.out.println("List of Available courses: ");
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.view_available_courses);
 			p1.setString(1, "SPRING");
+			p1.setString(2,StudentProfile.getInstance().getLevelclass());
 			ResultSet r1 = p1.executeQuery();
 			int i = 0;
 			List<AvailableClasses> cdata = new ArrayList<AvailableClasses>();
@@ -54,12 +55,12 @@ public class EnrollDropCourses {
 			System.out.println("Select the courses from below: ");
 			System.out.println("Press 0 to go back.");
 
-			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+
-					"Faculty".format("%-30s", "Faculty")+"Days".format("%-12s", "Days")+"Start time".format("%-15s", "Start time")+"End time");
+			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-40s", "Course Name")+
+					"Faculty".format("%-20s", "Faculty")+"Days".format("%-12s", "Days")+"Start time".format("%-15s", "Start time")+"End time");
 			for(int k = 0; k < i; k++){
 				String ks = Integer.toString(k + 1) + ".";
 				System.out.println(ks.format("%-8s", ks)+cdata.get(k).course_id.format("%-15s", cdata.get(k).course_id)+
-						cdata.get(k).cname.format("%-50s", cdata.get(k).cname)+cdata.get(k).fname.format("%-30s", cdata.get(k).fname)
+						cdata.get(k).cname.format("%-40s", cdata.get(k).cname)+cdata.get(k).fname.format("%-20s", cdata.get(k).fname)
 						+cdata.get(k).days.format("%-12s", cdata.get(k).days)+cdata.get(k).start_time.format("%-15s", cdata.get(k).start_time)
 						+cdata.get(k).end_time);
 			}
