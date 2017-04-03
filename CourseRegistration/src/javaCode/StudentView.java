@@ -208,7 +208,30 @@ public class StudentView {
 				Login.student_homepage(ip);
 			}
 			else if(choice == 1){
-				EnrollDropCourses.enrollCourses(ip);
+				try{
+					PreparedStatement p0 = connect.getConnection().prepareStatement(Queries.check_if_deadline_already_enforced);
+					ResultSet r = p0.executeQuery();
+				    if(r.next()){
+					int status = r.getInt("STATUS");
+					if (status == 1)
+						{System.out.println("Deadline Already Enforced for this Semester, Can't Enroll now.");
+						 connect.close(p0);
+						 Login.student_homepage(ip);
+						}
+					else if (status == 0){
+						connect.close(p0);
+						EnrollDropCourses.enrollCourses(ip);
+					}
+					
+				  }
+				}catch (SQLException e){
+						e.printStackTrace();
+					}
+					catch (Exception e){
+						System.out.println("Invalid values entered. Please enter correct values.");
+						System.out.println(e.getMessage());
+					}
+				
 			}
 			else if(choice == 2){
 				DropCourse.drop_course(ip);

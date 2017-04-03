@@ -74,4 +74,6 @@ public final class Queries {
 	static final String set_deadline_enforced_true = "UPDATE DEADLINE_ENFORCED SET STATUS = 1";
 	static final String clear_waitlist_table = "DELETE FROM WAITLIST";
 	static final String drop_enrolled_students_unpaid_fees = "DELETE from enrollment where (STUDENT_ID IN (Select student_id from Studentbill where TOTAL_AMOUNT-AMOUNT_PAID > 0) and SEMESTER = 'SPRING')";
+	
+	static final String check_if_below_min_credit_limit = "Select MIN_CREDIT,CURRENT_CREDIT From STUDENTCREDIT Where STUDENT_ID = ?";
 }
