@@ -181,7 +181,6 @@ public class DropCourse {
 				boolean check_credit_limit = CheckEligibility.check_credit_limit(0, ac1);
 				if(check_credit_limit){
 					// Enroll the waitlisted student for the course.
-					System.out.println("Credit limit satisfied for waitlisted person");
 					PreparedStatement pe3 = connect.getConnection().prepareStatement(Queries.insert_in_enrollment);
 					pe3.setInt(1, ac1.sid);
 					pe3.setString(2, ac1.course_id);
