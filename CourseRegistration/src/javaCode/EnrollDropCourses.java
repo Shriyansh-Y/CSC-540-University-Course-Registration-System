@@ -123,6 +123,15 @@ public class EnrollDropCourses {
 						EnrollDropCourses.enrollCourses(ip);
 					}
 					
+					// Checking the class size limit.
+					boolean class_enroll = CheckEligibility.check_class_size(cdata.get(choice - 1));
+					if(!class_enroll){
+						if(!CheckEligibility.check_waitlist_size(cdata.get(choice - 1))){
+							System.out.println("The course: "+cdata.get(choice - 1).course_id+" currently has no place in class as well as in waitlist.");
+							EnrollDropCourses.enrollCourses(ip);
+						}
+					}
+					
 					// Checking if special permission is required or not.
 					boolean special_permission = CheckEligibility.special_permission(cdata.get(choice - 1));
 					if(special_permission == false){
@@ -144,8 +153,8 @@ public class EnrollDropCourses {
 						}
 					}
 					
-					// Checking the class size limit.
-					boolean class_enroll = CheckEligibility.check_class_size(cdata.get(choice - 1));
+					
+					
 					if(class_enroll == false){	
 						// Enroll in wait list.
 						while(true){

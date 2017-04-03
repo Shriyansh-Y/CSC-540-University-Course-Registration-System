@@ -1,6 +1,6 @@
 package javaCode;
 
-import java.awt.List;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -85,11 +85,19 @@ public class DropCourse {
 					System.out.println("Select correct option.");
 				}
 				else if(choice <= cdata.size()){
+					System.out.println(cdata.get(choice - 1).sem + " "+ cdata.get(choice - 1).fname + cdata.get(choice - 1).course_id );
 					drop_enrolled(cdata.get(choice - 1), ip);
+					System.out.println("The course: "+cdata.get(choice - 1).course_id+" "+cdata.get(choice - 1).cname+" is Successfully dropped!");
+					//System.out.println("The course: "+ac.course_id+" "+ac.cname+" is Successfully dropped!");
+					//DropCourse.drop_course(ip);
+					enroll_waitlisted(cdata.get(choice - 1), ip);
+					DropCourse.drop_course(ip);
 				}
 				else if(choice > cdata.size() && choice <= cdata.size()+cdata1.size()){
 					drop_waitlisted(cdata1.get(choice - 1 - cdata.size()), ip);
 				}
+				//enroll_waitlisted(cdata.get(choice - 1), ip);
+				//DropCourse.drop_course(ip);
 			}
 		}  catch (SQLException e){
 			e.printStackTrace();
@@ -136,34 +144,73 @@ public class DropCourse {
 			
 			// Execute the query to delete the enrollment.
 			PreparedStatement pe1 = connect.getConnection().prepareStatement(Queries.drop_enrolled);
-			pe1.setInt(1, StudentProfile.getInstance().getSid());
+			int ss = StudentProfile.getInstance().getSid();
+			System.out.println(ss+" "+ ac.course_id+" "+ ac.fname);
+			pe1.setInt(1, ss);
 			pe1.setString(2, ac.course_id);
 			pe1.setString(3, ac.fname);
-			pe1.executeUpdate();
-			
+			pe1.execute();
+			System.out.println("This is the update count: "+pe1.getUpdateCount());
+			System.out.println("Done deleting from enrollment");
+			connect.close(pe1);
+		}
+		catch (SQLException e){
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			System.out.println("Invalid values entered. Please enter correct values.");
+			System.out.println(e.getMessage());
+		}
+	}
+		
+		public static void enroll_waitlisted(AvailableClasses ac, Scanner ip){
+			try{
+			int ss = StudentProfile.getInstance().getSid();
+				
 			// Checking for any waitlisted students to be enrolled for the course.
 			PreparedStatement pe2 = connect.getConnection().prepareStatement(Queries.get_course_waitlist);
+			System.out.println("Setting the course_id: "+ac.course_id);
 			pe2.setString(1, ac.course_id);
 			ResultSet re2 = pe2.executeQuery();
 			int start = 0;
 			while(re2.next()){
+				
 				// If there are students in the waitlisted course, check whether the credit limit is satisfied or not for the waitlisted student.
 				AvailableClasses ac1 = new AvailableClasses();
 				ac1.course_id = re2.getString("COURSE_ID");
 				ac1.fname = re2.getString("FACULTY");
 				ac1.wait_number = re2.getInt("WAITLIST_NUMBER");
 				ac1.dropc = re2.getString("DROP_COURSE");
+				ac1.sid = re2.getInt("STUDENT_ID");
+				System.out.println(ac1.course_id+" "+ac1.fname+" "+ac1.wait_number);
 				boolean check_credit_limit = CheckEligibility.check_credit_limit(0, ac1);
 				if(check_credit_limit){
 					// Enroll the waitlisted student for the course.
+					System.out.println("Credit limit satisfied for waitlisted person");
 					PreparedStatement pe3 = connect.getConnection().prepareStatement(Queries.insert_in_enrollment);
-					pe3.setInt(1, StudentProfile.getInstance().getSid());
+					pe3.setInt(1, ac1.sid);
 					pe3.setString(2, ac1.course_id);
 					pe3.setString(3, ac1.fname);
 					pe3.setString(4, "SPRING");
 					pe3.setString(5, "F");
 					pe3.setInt(6, 3);
 					pe3.executeQuery();
+					
+					// Delete from waitlist
+					PreparedStatement pe11 = connect.getConnection().prepareStatement(Queries.drop_waitlist);
+					pe11.setInt(1, ac1.sid);
+					pe11.setString(2, ac1.course_id);
+					pe11.setString(3, ac1.fname);
+					pe11.executeUpdate();
+					
+					// Decrement the waitlist number
+					PreparedStatement pe1111 = connect.getConnection().prepareStatement(Queries.update_waitlist);
+					pe1111.setString(1, ac1.course_id);
+					pe1111.setString(2, ac1.fname);
+					pe1111.setInt(3, ac1.wait_number);
+					pe1111.executeUpdate();
+					
+					break;
 				}
 				else{
 					// Credit limit is violated.
@@ -176,7 +223,7 @@ public class DropCourse {
 					else{
 						// Checking if the course to be dropped is present in the enrollment table or not for the current student.
 						PreparedStatement pe4 = connect.getConnection().prepareStatement(Queries.get_drop_course);
-						pe4.setInt(1, StudentProfile.getInstance().getSid());
+						pe4.setInt(1, ac1.sid);
 						pe4.setString(2, ac1.dropc);
 						ResultSet re4 = pe4.executeQuery();
 						if(re4.next()){
@@ -185,17 +232,36 @@ public class DropCourse {
 							PreparedStatement pe5 = connect.getConnection().prepareStatement(Queries.drop_enrolled2);
 							pe5.setInt(1, StudentProfile.getInstance().getSid());
 							pe5.setString(2, ac1.dropc);
-							pe5.executeUpdate();
+							pe5.execute();
+							
 							
 							// Enrolling the student from waitlist to enrollment table.
 							PreparedStatement pe6 = connect.getConnection().prepareStatement(Queries.insert_in_enrollment);
-							pe6.setInt(1, StudentProfile.getInstance().getSid());
-							pe6.setString(2, ac1.dropc);
+							pe6.setInt(1, ac1.sid);
+							pe6.setString(2, ac1.course_id);
 							pe6.setString(3, ac1.fname);
 							pe6.setString(4, "SPRING");
 							pe6.setString(5, "F");
 							pe6.setInt(6, 3);
 							pe6.executeQuery();
+							
+							// Delete from waitlist
+							PreparedStatement pe112 = connect.getConnection().prepareStatement(Queries.drop_waitlist);
+							pe112.setInt(1, ac1.sid);
+							pe112.setString(2, ac1.course_id);
+							pe112.setString(3, ac1.fname);
+							pe112.executeUpdate();
+							
+							// Decrement the waitlist number
+							// Decrement the waitlist number
+							PreparedStatement pe1111 = connect.getConnection().prepareStatement(Queries.update_waitlist);
+							pe1111.setString(1, ac1.course_id);
+							pe1111.setString(2, ac1.fname);
+							pe1111.setInt(3, ac1.wait_number);
+							pe1111.executeUpdate();
+							
+							break;
+							
 						}
 						else{
 							/*
@@ -208,9 +274,7 @@ public class DropCourse {
 			if(start == 0){
 				System.out.println("The course: "+ac.course_id+" "+ac.cname+" is Successfully dropped!");
 				DropCourse.drop_course(ip);
-			}
-			
-			
+			}	
 		}
 		catch (SQLException e){
 			e.printStackTrace();

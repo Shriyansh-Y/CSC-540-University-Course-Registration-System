@@ -75,7 +75,6 @@ public class CheckEligibility {
 			p1.setString(1, ac.course_id);
 			ResultSet r1 = p1.executeQuery();
 			if(r1.next()){
-				System.out.println(r1.getString("SPCL_APPROVAL_REQ"));
 				if(r1.getString("SPCL_APPROVAL_REQ").equals("Yes")){
 					return false;
 				}
@@ -219,6 +218,23 @@ public class CheckEligibility {
 	public static boolean check_class_size(AvailableClasses ac){
 	try{
 		if(ac.class_size > ac.num_enrolled){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	catch (Exception e){
+		System.out.println("Invalid values entered. Please enter correct values.");
+		System.out.println(e.getMessage());
+	}
+	return true;
+	}
+	
+	// Method to check waitlist size
+	public static boolean check_waitlist_size(AvailableClasses ac){
+	try{
+		if(ac.waitlist_size > ac.waitlisted){
 			return true;
 		}
 		else{
