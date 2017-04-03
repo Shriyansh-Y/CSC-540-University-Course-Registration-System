@@ -151,16 +151,51 @@ public class Login {
 		
 	}
 	
-	// Method to display options for a student after successfull login.
+	// Method to display options for a student after successful login.
 	public static void student_homepage(Scanner ip){
 		System.out.println("\n**Hello " + StudentProfile.getInstance().getFirstname() + "**");
 		while(true){
+			try{
+				PreparedStatement p0 = connect.getConnection().prepareStatement(Queries.check_if_deadline_already_enforced);
+				PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.check_if_below_min_credit_limit);
+
+				ResultSet r0 = p0.executeQuery();
+				p1.setInt(1,StudentProfile.getInstance().getSid() );
+				ResultSet r1 = p1.executeQuery();
+			    if(r0.next() && r1.next()){
+				int status = r0.getInt("STATUS");
+				int min_credit = r1.getInt("MIN_CREDIT");
+				int curr_credit = r1.getInt("CURRENT_CREDIT");
+				if (status == 1 && (min_credit > curr_credit))
+					{
+					 System.out.println();
+					 System.out.println("**** ALERT ****");
+					 System.out.println("****You do not meet Minimum Credit Requirements for this semester.****");
+					 System.out.println();
+					 connect.close(p0);
+					 connect.close(p1);
+					}
+				else {
+					connect.close(p0);
+					connect.close(p1);
+				  }
+				}
+				
+			    
+			}catch (SQLException e){
+					e.printStackTrace();
+				}
+				catch (Exception e){
+					System.out.println("Invalid values entered. Please enter correct values.");
+					System.out.println(e.getMessage());
+				}
 			System.out.println("1. View/Edit Profile");
 			System.out.println("2. View/Enroll/Drop Courses");
 			System.out.println("3. View Pending Courses");
 			System.out.println("4. View Grades");
 			System.out.println("5. View/Pay Bills");
 			System.out.println("6. Logout");
+			
 			System.out.print("Choice: ");
 			
 			int choice = ip.nextInt();

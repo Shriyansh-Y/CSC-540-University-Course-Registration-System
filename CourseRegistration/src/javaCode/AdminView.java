@@ -409,6 +409,7 @@ catch (Exception e){
 		System.out.println("Press 0 to go back.");
 		System.out.println("1. YES");
 		System.out.println("2. NO");
+		System.out.print("Choice:");
 		int choice = ip.nextInt();
 		switch(choice){
 		case 0:
