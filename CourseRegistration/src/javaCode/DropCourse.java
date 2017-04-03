@@ -87,9 +87,6 @@ public class DropCourse {
 				else if(choice <= cdata.size()){
 					System.out.println(cdata.get(choice - 1).sem + " "+ cdata.get(choice - 1).fname + cdata.get(choice - 1).course_id );
 					drop_enrolled(cdata.get(choice - 1), ip);
-					System.out.println("The course: "+cdata.get(choice - 1).course_id+" "+cdata.get(choice - 1).cname+" is Successfully dropped!");
-					//System.out.println("The course: "+ac.course_id+" "+ac.cname+" is Successfully dropped!");
-					//DropCourse.drop_course(ip);
 					enroll_waitlisted(cdata.get(choice - 1), ip);
 					DropCourse.drop_course(ip);
 				}
@@ -145,14 +142,10 @@ public class DropCourse {
 			// Execute the query to delete the enrollment.
 			PreparedStatement pe1 = connect.getConnection().prepareStatement(Queries.drop_enrolled);
 			int ss = StudentProfile.getInstance().getSid();
-			System.out.println(ss+" "+ ac.course_id+" "+ ac.fname);
 			pe1.setInt(1, ss);
 			pe1.setString(2, ac.course_id);
 			pe1.setString(3, ac.fname);
 			pe1.execute();
-			System.out.println("This is the update count: "+pe1.getUpdateCount());
-			System.out.println("Done deleting from enrollment");
-			connect.close(pe1);
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -169,7 +162,6 @@ public class DropCourse {
 				
 			// Checking for any waitlisted students to be enrolled for the course.
 			PreparedStatement pe2 = connect.getConnection().prepareStatement(Queries.get_course_waitlist);
-			System.out.println("Setting the course_id: "+ac.course_id);
 			pe2.setString(1, ac.course_id);
 			ResultSet re2 = pe2.executeQuery();
 			int start = 0;
@@ -182,7 +174,6 @@ public class DropCourse {
 				ac1.wait_number = re2.getInt("WAITLIST_NUMBER");
 				ac1.dropc = re2.getString("DROP_COURSE");
 				ac1.sid = re2.getInt("STUDENT_ID");
-				System.out.println(ac1.course_id+" "+ac1.fname+" "+ac1.wait_number);
 				boolean check_credit_limit = CheckEligibility.check_credit_limit(0, ac1);
 				if(check_credit_limit){
 					// Enroll the waitlisted student for the course.
