@@ -5,5 +5,5 @@ The goal of the project is to design a relational database application for suppo
 
 Instructions to Run: 
 1. Run the sql queries file in your database to create inital tables.
-2. Import the oracle jdbc driver into te project.
+2. Import the oracle jdbc driver into the project.
 2. Run the jar file and enter your ncsu oracle server username and password.
