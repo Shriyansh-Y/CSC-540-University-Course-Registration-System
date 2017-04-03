@@ -149,7 +149,7 @@ public class EnrollDropCourses {
 					if(class_enroll == false){	
 						// Enroll in wait list.
 						while(true){
-							System.out.println("The current class size is full. Do you wish to be placed on the waitlist:\n1. Yes\n2. No");
+							System.out.println("The current class size is full. Do you wish to be placed on the waitlist:\n1. Yes \n2. No");
 							System.out.print("Your choice: ");
 							int n1 = ip.nextInt();
 							if(n1 == 2){
@@ -188,6 +188,8 @@ public class EnrollDropCourses {
 								else{
 									enroll_waitlist(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
 											cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, "",ip);
+									EnrollDropCourses.enrollCourses(ip);
+
 								}
 							}
 							else{
@@ -313,28 +315,28 @@ public class EnrollDropCourses {
 					String cid = r1.getString("COURSE_ID");
 					
 					PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.select_course_name);
-					PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.select_course_semester);
+					//PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.select_course_semester);
 
 					p2.setString(1, cid);
-					p3.setString(1, cid);
-					p3.setInt(2, StudentProfile.getInstance().getSid());
+					//p3.setString(1, cid);
+					//p3.setInt(1, StudentProfile.getInstance().getSid());
 
 
 					ResultSet r2 = p2.executeQuery();
-					ResultSet r3 = p3.executeQuery();
+					//ResultSet r3 = p3.executeQuery();
 
 					if(r2.next()){
 						ec.course_name = r2.getString("COURSE_NAME");
 					}
-					if(r3.next()){
-						ec.sem = r3.getString("SEMESTER");
-					}
+					
+						ec.sem = r1.getString("SEMESTER");
+					
 					ec.cid = cid;		
 					edata.add(ec);
 					
 					
 					connect.close(p2);
-					connect.close(p3);
+				
 
 					
 				}
@@ -387,7 +389,7 @@ public class EnrollDropCourses {
 			cp1.setString(4, faculty);
 			ResultSet cr1 = cp1.executeQuery();
 			if(cr1.next()){
-				if(ii == 0){
+				if(ii == 1){
 					System.out.println("~~Successfully Waitlisted in the Course "+ course_id+"~~");
 					EnrollDropCourses.enrollCourses(ip);
 				}

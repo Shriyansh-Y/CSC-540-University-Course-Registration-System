@@ -123,9 +123,9 @@ public class CheckEligibility {
 
 			while(r1.next())
 			{	
-				System.out.println("The conflicting course is: " + r1.getString("Course_Id"));
+				//System.out.println("The conflicting course is: " + r1.getString("Course_Id"));
 				String courseInHand=r1.getString("Course_id");
-				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.view_course_offerings);
+				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.view_course_offerings1);
 				p3.setString(1, courseInHand);
 				ResultSet rcourse = p3.executeQuery();
 			if(rcourse.next())
