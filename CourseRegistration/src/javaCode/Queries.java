@@ -63,9 +63,9 @@ public final class Queries {
 	static final String update_grade_credit_enrollment="update enrollment set letter_grade=?, credit=? where student_id=? and course_id=? ";
 	static final String proc_call_update_grade="{call calgpa (?)}";
 	static final String special_permission_course_status ="SELECT COURSE_ID, FACULTY, SEMESTER, APPROVAL_STATUS FROM SPECIAL_PERMISSION WHERE STUDENT_ID=? and SEMESTER='SPRING'";
-	static final String get_course_waitlist = "SELECT * FROM WAITLIST WHERE COURSE_ID = ? and SEMESTER = 'SPRING'";
+	static final String get_course_waitlist = "SELECT * FROM WAITLIST WHERE COURSE_ID = ? and SEMESTER = 'SPRING' ORDER BY WAITLIST_NUMBER";
 	static final String get_drop_course = "SELECT * FROM ENROLLMENT WHERE STUDENT_ID = ? and COURSE_ID = ? and SELESTER = 'SPRING'";
-	static final String drop_enrolled2 = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ?";
+	static final String drop_enrolled2 = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and COURSE_ID = ? and FACULTY = ?";
 	static final String get_approvedreject_requests = "SELECT * FROM SPECIAL_PERMISSION WHERE APPROVAL_STATUS <> 'Pending'";
 	static final String get_pending_requests = "SELECT * FROM SPECIAL_PERMISSION WHERE APPROVAL_STATUS = 'Pending' ORDER BY CREATE_TIME";
 	static final String update_approval_request = "UPDATE SPECIAL_PERMISSION SET APPROVAL_STATUS = ?, ADMIN_NAME = ?, DATE_OF_APPROVAL = TO_DATE(?,'YYYY-MM-DD') "
@@ -76,4 +76,5 @@ public final class Queries {
 	static final String drop_enrolled_students_unpaid_fees = "DELETE from enrollment where (STUDENT_ID IN (Select student_id from Studentbill where TOTAL_AMOUNT-AMOUNT_PAID > 0) and SEMESTER = 'SPRING')";
 	
 	static final String check_if_below_min_credit_limit = "Select MIN_CREDIT,CURRENT_CREDIT From STUDENTCREDIT Where STUDENT_ID = ?";
+	static final String update_waitlist = "UPDATE WAITLIST SET WAITLIST_NUMBER = (WAITLIST_NUMBER - 1) WHERE COURSE_ID = ? and FACULTY = ? and WAITLIST_NUMBER > ?";
 }
