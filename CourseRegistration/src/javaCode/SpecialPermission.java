@@ -182,10 +182,6 @@ public class SpecialPermission {
 						pcheck1.setString(1, cdata2.get(choice - 1).course_id);
 						ResultSet rcheck1 = pcheck1.executeQuery();
 						if(rcheck1.next()){
-							System.out.println("Waitlist size: "+rcheck1.getInt("WAITLIST_SIZE"));
-							System.out.println("Waitlisted size: "+rcheck1.getInt("WAITLISTED"));
-							System.out.println("Class size: "+rcheck1.getInt("CLASS_SIZE"));
-							System.out.println("Enrolled size: "+rcheck1.getInt("NUMBER_OF_ENROLLED"));
 							if(rcheck1.getInt("CLASS_SIZE") > rcheck1.getInt("NUMBER_OF_ENROLLED")){
 								// Class available to enroll.
 								EnrollDropCourses.enroll_class(0, cdata2.get(choice - 1).sid, cdata2.get(choice - 1).course_id,
