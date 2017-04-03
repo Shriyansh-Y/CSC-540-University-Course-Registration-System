@@ -1,9 +1,27 @@
-# CSC 540 - (DATABASE MANAGEMENT CONCEPTS & SYSTEMS) SPRING 2017 PROJECT 1 - DATABASE APPLICATION DESIGN & IMPLEMENTATION 
-# COURSE REGISTRATION SYSTEM
+Team Members-
 
-The goal of the project is to design a relational database application for supporting course registration at a university such as ours. The application will manage different kinds of data about students and courses subject to a variety of application requirements.
+Names					Unity id
+Anuraag Motiwale		asmotiwa
+Abhishek Singh			aksingh5
+Parag Nakhwa			psnakhwa
+Shriyansh Yadav			scyadav
 
-Instructions to Run: 
-1. Run the sql queries file in your database to create inital tables.
-2. Import the oracle jdbc driver into the project.
-2. Run the jar file and enter your ncsu oracle server username and password.
+
+
+Instructions to run the application:
+1. First, execute the sql_queries.sql file to create tables, triggers and procedures.
+2. Execute the insert_sample_data.sql file to insert sample data in the database.
+3. Run the CourseRegistration.jar file and login to the database where the sample data 
+   is populated.
+4. Below are the initial login credentials for the users:
+
+	Admin-
+	Username		Password
+	alby   			hogwarts
+	
+	Student-
+	Username		Password
+	hpotter			101
+	hgranger		102
+	rweasley		103
+	dmalfoy			104
