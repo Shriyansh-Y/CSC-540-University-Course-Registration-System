@@ -20,6 +20,8 @@ public class AvailableClasses {
 	public String status;
 	public String admin;
 	public String ddate;
+	public String var_credit;
+	public String credit;
 	
 	public void set_start_time(String stime){
 		

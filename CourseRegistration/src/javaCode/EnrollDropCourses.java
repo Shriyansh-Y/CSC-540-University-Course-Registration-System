@@ -55,12 +55,32 @@ public class EnrollDropCourses {
 			System.out.println("Select the courses from below: ");
 			System.out.println("Press 0 to go back.");
 
-			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-40s", "Course Name")+
+			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-40s", "Course Name")+"Credits".format("%-10s", "Credits")+
 					"Faculty".format("%-20s", "Faculty")+"Days".format("%-12s", "Days")+"Start time".format("%-15s", "Start time")+"End time");
 			for(int k = 0; k < i; k++){
+				// Getting the credit information.
+				PreparedStatement pfetchvarcredits = connect.getConnection().prepareStatement(Queries.view_course);
+				pfetchvarcredits.setString(1, cdata.get(k).course_id);
+				ResultSet rvarcredit=pfetchvarcredits.executeQuery();
+				String varcredindicator=null;
+				String cr = null;
+				if(rvarcredit.next())
+				{
+					varcredindicator=rvarcredit.getString("variable_credit");
+					cr = Integer.toString(rvarcredit.getInt("CREDITS"));			
+				}
+				if(varcredindicator.equals("Yes")){
+					PreparedStatement pgetmaxmincr = connect.getConnection().prepareStatement(Queries.get_variable_credit);
+					pgetmaxmincr.setString(1, cdata.get(k).course_id);
+					ResultSet rr11 = pgetmaxmincr.executeQuery();
+					if(rr11.next()){
+						cr = Integer.toString(rr11.getInt("MIN_CREDIT"))+"-"+Integer.toString(rr11.getInt("MAX_CREDIT"));	;
+					}
+				}
+				
 				String ks = Integer.toString(k + 1) + ".";
 				System.out.println(ks.format("%-8s", ks)+cdata.get(k).course_id.format("%-15s", cdata.get(k).course_id)+
-						cdata.get(k).cname.format("%-40s", cdata.get(k).cname)+cdata.get(k).fname.format("%-20s", cdata.get(k).fname)
+						cdata.get(k).cname.format("%-40s", cdata.get(k).cname)+cr.format("%-10s", cr)+cdata.get(k).fname.format("%-20s", cdata.get(k).fname)
 						+cdata.get(k).days.format("%-12s", cdata.get(k).days)+cdata.get(k).start_time.format("%-15s", cdata.get(k).start_time)
 						+cdata.get(k).end_time);
 			}
@@ -131,6 +151,9 @@ public class EnrollDropCourses {
 							EnrollDropCourses.enrollCourses(ip);
 						}
 					}
+					
+					// Checking if the course has variable credits or not.
+					
 					
 					// Checking if special permission is required or not.
 					boolean special_permission = CheckEligibility.special_permission(cdata.get(choice - 1));
