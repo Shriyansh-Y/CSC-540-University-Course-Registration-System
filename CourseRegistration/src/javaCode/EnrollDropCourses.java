@@ -27,12 +27,14 @@ public class EnrollDropCourses {
 				AvailableClasses ac = new AvailableClasses();
 				String cid = r1.getString("COURSE_ID");
 				
-				PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.select_course_name);
+				PreparedStatement p2 = connect.getConnection().prepareStatement(Queries.view_course);
 				p2.setString(1, cid);
 				ResultSet r2 = p2.executeQuery();
 				
 				if(r2.next()){
 					ac.cname = r2.getString("COURSE_NAME");
+					ac.var_credit = r2.getString("variable_credit");
+					ac.credit = r2.getInt("CREDITS");
 				}
 				ac.class_size = r1.getInt("CLASS_SIZE");
 				ac.course_id = cid;
@@ -58,24 +60,27 @@ public class EnrollDropCourses {
 			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-40s", "Course Name")+"Credits".format("%-10s", "Credits")+
 					"Faculty".format("%-20s", "Faculty")+"Days".format("%-12s", "Days")+"Start time".format("%-15s", "Start time")+"End time");
 			for(int k = 0; k < i; k++){
-				// Getting the credit information.
-				PreparedStatement pfetchvarcredits = connect.getConnection().prepareStatement(Queries.view_course);
-				pfetchvarcredits.setString(1, cdata.get(k).course_id);
-				ResultSet rvarcredit=pfetchvarcredits.executeQuery();
+//				// Getting the credit information.
+//				PreparedStatement pfetchvarcredits = connect.getConnection().prepareStatement(Queries.view_course);
+//				pfetchvarcredits.setString(1, cdata.get(k).course_id);
+//				ResultSet rvarcredit=pfetchvarcredits.executeQuery();
 				String varcredindicator=null;
 				String cr = null;
-				if(rvarcredit.next())
-				{
-					varcredindicator=rvarcredit.getString("variable_credit");
-					cr = Integer.toString(rvarcredit.getInt("CREDITS"));			
-				}
-				if(varcredindicator.equals("Yes")){
+//				if(rvarcredit.next())
+//				{
+//					varcredindicator=rvarcredit.getString("variable_credit");
+//					cr = Integer.toString(rvarcredit.getInt("CREDITS"));			
+//				}
+				if(cdata.get(k).var_credit.equals("Yes")){
 					PreparedStatement pgetmaxmincr = connect.getConnection().prepareStatement(Queries.get_variable_credit);
 					pgetmaxmincr.setString(1, cdata.get(k).course_id);
 					ResultSet rr11 = pgetmaxmincr.executeQuery();
 					if(rr11.next()){
 						cr = Integer.toString(rr11.getInt("MIN_CREDIT"))+"-"+Integer.toString(rr11.getInt("MAX_CREDIT"));	;
 					}
+				}
+				else{
+					cr = Integer.toString(cdata.get(k).credit);
 				}
 				
 				String ks = Integer.toString(k + 1) + ".";
@@ -153,7 +158,51 @@ public class EnrollDropCourses {
 					}
 					
 					// Checking if the course has variable credits or not.
-					
+//					PreparedStatement pfetchvarcredits = connect.getConnection().prepareStatement(Queries.view_course);
+//					pfetchvarcredits.setString(1, cdata.get(k).course_id);
+//					ResultSet rvarcredit=pfetchvarcredits.executeQuery();
+//					String varcredindicator=null;
+//					String cr = null;
+//					if(rvarcredit.next())
+//					{
+//						varcredindicator=rvarcredit.getString("variable_credit");
+//						cr = Integer.toString(rvarcredit.getInt("CREDITS"));			
+//					}
+//					if(varcredindicator.equals("Yes")){
+//						PreparedStatement pgetmaxmincr = connect.getConnection().prepareStatement(Queries.get_variable_credit);
+//						pgetmaxmincr.setString(1, cdata.get(k).course_id);
+//						ResultSet rr11 = pgetmaxmincr.executeQuery();
+//						if(rr11.next()){
+//							cr = Integer.toString(rr11.getInt("MIN_CREDIT"))+"-"+Integer.toString(rr11.getInt("MAX_CREDIT"));	;
+//						}
+//					}
+//					
+					if(cdata.get(choice - 1).var_credit.equals("Yes")){
+						// Implying the course has variable credit limit.
+						System.out.println("\nThis course has a variable credit limit.");
+						while(true){
+							
+							System.out.print("Please select the number of credits you want to apply for: ");
+							PreparedStatement pgetmaxmincr = connect.getConnection().prepareStatement(Queries.get_variable_credit);
+							pgetmaxmincr.setString(1, cdata.get(choice - 1).course_id);
+							ResultSet rr11 = pgetmaxmincr.executeQuery();
+							int min_credit = 0;
+							int max_credit = 0;
+							if(rr11.next()){
+								min_credit = rr11.getInt("MIN_CREDIT");
+								max_credit = rr11.getInt("MAX_CREDIT");
+							}
+							String vc1 = ip.next();
+							int vc = Integer.parseInt(vc1);
+							if(vc >= min_credit && vc<= max_credit){
+								cdata.get(choice - 1).credit = vc;
+								break;
+							}
+							else{
+								System.out.println("Please enter valid credit from the credit limit range.");
+							}
+						}
+					}
 					
 					// Checking if special permission is required or not.
 					boolean special_permission = CheckEligibility.special_permission(cdata.get(choice - 1));
@@ -211,7 +260,7 @@ public class EnrollDropCourses {
 									EnrollDropCourses.enrollCourses(ip);
 									else if(c1 - 1 <= t){
 										enroll_waitlist(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
-												cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, ar1.get(c1 - 1),ip);
+												cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, ar1.get(c1 - 1), cdata.get(choice - 1).credit,ip);
 									}else{
 										System.out.println("Please select a correct option.");
 									}
@@ -219,7 +268,7 @@ public class EnrollDropCourses {
 								}
 								else{
 									enroll_waitlist(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
-											cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, "",ip);
+											cdata.get(choice - 1).sem, cdata.get(choice - 1).waitlisted + 1, "", cdata.get(choice - 1).credit,ip);
 									EnrollDropCourses.enrollCourses(ip);
 
 								}
@@ -231,7 +280,7 @@ public class EnrollDropCourses {
 					}
 					else{
 						enroll_class(1, StudentProfile.getInstance().getSid(), cdata.get(choice - 1).course_id, cdata.get(choice - 1).fname, 
-								cdata.get(choice - 1).sem, "F",3,ip);
+								cdata.get(choice - 1).sem, "F",cdata.get(choice - 1).credit,ip);
 						EnrollDropCourses.enrollCourses(ip);
 					}
 				}
@@ -276,6 +325,7 @@ public class EnrollDropCourses {
 			p1.setString(6, "Pending");
 			p1.setString(7, "");
 			p1.setString(8, "");
+			p1.setInt(9,ac.credit);
 			p1.execute();
 			System.out.println("Special Permission has been sent to the Admin.");
 		} catch (SQLException e){
@@ -402,7 +452,7 @@ public class EnrollDropCourses {
 	}
 	
 	// Method to enroll in waitlist.
-	public static void enroll_waitlist(int ii, int student_id, String course_id, String faculty, String sem, int wait_num, String dropc,Scanner ip){
+	public static void enroll_waitlist(int ii, int student_id, String course_id, String faculty, String sem, int wait_num, String dropc, int credit,Scanner ip){
 		try{
 			PreparedStatement p1 = connect.getConnection().prepareStatement(Queries.insert_in_waitlist);
 			p1.setInt(1, student_id);
@@ -411,6 +461,7 @@ public class EnrollDropCourses {
 			p1.setString(4, sem);
 			p1.setInt(5, wait_num);
 			p1.setString(6, dropc);
+			p1.setInt(7, credit);
 			p1.executeQuery();
 			
 			// Check if you have already been enrolled in the course.
