@@ -30,19 +30,21 @@ public class DropCourse {
 				ac.course_id = r1.getString("COURSE_ID");
 				ac.sem = r1.getString("SEMESTER");
 				ac.fname = r1.getString("FACULTY");
+				ac.credit = r1.getInt("CREDITS");
 				cdata.add(ac);
 			}
 			System.out.println("Select the courses from below: ");
 			System.out.println("Press 0 to go back.");
 			System.out.println("List of Enrolled courses: ");
 			
-			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+
+			System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Course Id".format("%-15s", "CourseId")+"Course Name".format("%-50s", "Course Name")+"Credits".format("%-10s", "Credits")+
 					"Faculty".format("%-30s", "Faculty"));
 			
 			for(int i = 0; i < cdata.size(); i++){
 				String is = Integer.toString(i + 1) + ".";
 				System.out.println(is.format("%-8s", is)+cdata.get(i).course_id.format("%-15s", cdata.get(i).course_id)+
-						cdata.get(i).cname.format("%-50s", cdata.get(i).cname)+cdata.get(i).fname.format("%-30s", cdata.get(i).fname));
+						cdata.get(i).cname.format("%-50s", cdata.get(i).cname)+Integer.toString(cdata.get(i).credit).format("%-10s",Integer.toString(cdata.get(i).credit))
+						+cdata.get(i).fname.format("%-30s", cdata.get(i).fname));
 				
 			}
 			
@@ -64,6 +66,7 @@ public class DropCourse {
 				ac.fname = r3.getString("FACULTY");
 				ac.wait_number = r3.getInt("WAITLIST_NUMBER");
 				ac.dropc = r3.getString("DROP_COURSE");
+				ac.credit = r3.getInt("CREDITS");
 				cdata1.add(ac);
 			}
 			if(cdata1.size() > 0)
@@ -71,7 +74,8 @@ public class DropCourse {
 			for(int t = 0; t < cdata1.size(); t++){
 				String ts = Integer.toString(t + cdata.size() + 1) + ".";
 				System.out.println(ts.format("%-8s", ts)+cdata1.get(t).course_id.format("%-15s", cdata1.get(t).course_id)+
-						cdata1.get(t).cname.format("%-50s", cdata1.get(t).cname)+cdata1.get(t).fname.format("%-30s", cdata1.get(t).fname));	
+						cdata1.get(t).cname.format("%-50s", cdata1.get(t).cname)+Integer.toString(cdata1.get(t).credit).format("%-10s",Integer.toString(cdata1.get(t).credit))
+						+cdata1.get(t).fname.format("%-30s", cdata1.get(t).fname));	
 			}
 			
 			
@@ -174,6 +178,7 @@ public class DropCourse {
 				ac1.wait_number = re2.getInt("WAITLIST_NUMBER");
 				ac1.dropc = re2.getString("DROP_COURSE");
 				ac1.sid = re2.getInt("STUDENT_ID");
+				ac1.credit = re2.getInt("CREDIT");
 				boolean check_credit_limit = CheckEligibility.check_credit_limit(0, ac1);
 				if(check_credit_limit){
 					// Enroll the waitlisted student for the course.
@@ -184,7 +189,7 @@ public class DropCourse {
 					pe3.setString(3, ac1.fname);
 					pe3.setString(4, "SPRING");
 					pe3.setString(5, "F");
-					pe3.setInt(6, 3);
+					pe3.setInt(6, ac1.credit);
 					pe3.executeQuery();
 					
 					// Delete from waitlist
@@ -233,7 +238,7 @@ public class DropCourse {
 							pe6.setString(3, ac1.fname);
 							pe6.setString(4, "SPRING");
 							pe6.setString(5, "F");
-							pe6.setInt(6, 3);
+							pe6.setInt(6, ac1.credit);
 							pe6.executeQuery();
 							
 							// Delete from waitlist

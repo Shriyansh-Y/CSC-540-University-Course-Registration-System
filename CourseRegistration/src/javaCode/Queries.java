@@ -45,12 +45,12 @@ public final class Queries {
 	static final String pay_bill = "Update STUDENTBILL Set AMOUNT_PAID = AMOUNT_PAID + ? Where STUDENT_ID = ? ";
 	//static final String select_course_semester = "Select SEMESTER from course_offering where COURSE_ID = ?";
 	static final String get_variable_credit = "Select * FROM VARIABLE_CEDIT_COURSES WHERE COURSE_ID = ?";
-	static final String insert_special_request = "Insert into SPECIAL_PERMISSION VALUES(?,?,?,?,?,?,?,?)";
+	static final String insert_special_request = "Insert into SPECIAL_PERMISSION VALUES(?,?,?,?,?,?,?,?,?)";
 	static final String check_permission_entry = "Select * FROM SPECIAL_PERMISSION WHERE student_id = ? and course_id = ? and faculty = ? and semester = ?";
 	static final String insert_in_enrollment = "Insert into enrollment values(?,?,?,?,?,?)";
 	static final String check_enrollment = "Select * from enrollment where student_id = ? and course_id = ? and semester = ? and faculty = ?";
 	static final String check_waitlist = "Select * from waitlist where student_id = ? and course_id = ? and semester = ? and faculty = ?";
-	static final String insert_in_waitlist = "Insert into waitlist values(?,?,?,?,?,?)";
+	static final String insert_in_waitlist = "Insert into waitlist values(?,?,?,?,?,?,?)";
 	static final String check_schedule_enrolled = "SELECT COURSE_ID FROM ENROLLMENT WHERE STUDENT_ID = ? and semester = 'SPRING' UNION ALL SELECT COURSE_ID FROM WAITLIST WHERE STUDENT_ID = ? and semester = 'SPRING'";
 	static final String get_cid = "select * from ENROLLMENT WHERE student_id = ? and semester = 'SPRING'";
 	static final String get_enrolled = "Select * from ENROLLMENT WHERE STUDENT_ID = ? and SEMESTER = 'SPRING' and LETTER_GRADE = 'F'";

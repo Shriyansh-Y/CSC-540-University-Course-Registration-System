@@ -119,6 +119,7 @@ public class SpecialPermission {
 				ac2.status = ra1.getString("APPROVAL_STATUS");
 				ac2.fname = ra1.getString("FACULTY");
 				ac2.sem = ra1.getString("SEMESTER");
+				ac2.credit = ra1.getInt("CREDITS");
 				
 				cdata2.add(ac2);
 			}
@@ -129,12 +130,13 @@ public class SpecialPermission {
 			else{
 				System.out.println("List of Pending Requests: ");
 				System.out.println("Sr.No.".format("%-8s", "Sr.No.") + "Student Id".format("%-13s", "Student Id")+"Course Id".format("%-15s", "CourseId")+
-						"Course Name".format("%-50s", "Course Name")+"Semester".format("%-15s", "Semester")+"Status".format("%-20s", "Status"));
+						"Course Name".format("%-50s", "Course Name")+"Credits".format("%-10s", "Credits")+"Semester".format("%-15s", "Semester")+"Status".format("%-20s", "Status"));
 			
 				for(int i = 0; i < cdata2.size(); i++){
 					String is = Integer.toString(i + 1) + ".";
 					System.out.println(is.format("%-8s", is)+Integer.toString(cdata2.get(i).sid).format("%-13s", Integer.toString(cdata2.get(i).sid))+
 							cdata2.get(i).course_id.format("%-15s", cdata2.get(i).course_id)+cdata2.get(i).cname.format("%-50s", cdata2.get(i).cname)+
+							Integer.toString(cdata2.get(i).credit).format("%-10s",Integer.toString(cdata2.get(i).credit))+
 							cdata2.get(i).sem.format("%-15s", cdata2.get(i).sem)+cdata2.get(i).status.format("%-20s", cdata2.get(i).status));	
 				
 				}
@@ -185,7 +187,7 @@ public class SpecialPermission {
 							if(rcheck1.getInt("CLASS_SIZE") > rcheck1.getInt("NUMBER_OF_ENROLLED")){
 								// Class available to enroll.
 								EnrollDropCourses.enroll_class(0, cdata2.get(choice - 1).sid, cdata2.get(choice - 1).course_id,
-										cdata2.get(choice - 1).fname, cdata2.get(choice - 1).sem, "F", 3, ip);
+										cdata2.get(choice - 1).fname, cdata2.get(choice - 1).sem, "F", cdata2.get(choice - 1).credit, ip);
 								viewPendingMenu(ip);
 							}
 							
@@ -193,7 +195,7 @@ public class SpecialPermission {
 							else if(rcheck1.getInt("WAITLIST_SIZE") > rcheck1.getInt("WAITLISTED")){
 								EnrollDropCourses.enroll_waitlist(0, cdata2.get(choice - 1).sid, cdata2.get(choice - 1).course_id,
 										cdata2.get(choice - 1).fname, cdata2.get(choice - 1).sem, 
-										rcheck1.getInt("WAITLISTED") + 1,"", ip);
+										rcheck1.getInt("WAITLISTED") + 1,"",cdata2.get(choice - 1).credit, ip);
 							}
 							else{
 								// No action as waitlist and class size are full.
