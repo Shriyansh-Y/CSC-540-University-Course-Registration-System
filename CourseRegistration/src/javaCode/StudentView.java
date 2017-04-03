@@ -216,7 +216,7 @@ public class StudentView {
 					if (status == 1)
 						{System.out.println("Deadline Already Enforced for this Semester, Can't Enroll now.");
 						 connect.close(p0);
-						 Login.student_homepage(ip);
+						 viewenrollCourses(ip);
 						}
 					else if (status == 0){
 						connect.close(p0);
@@ -234,7 +234,29 @@ public class StudentView {
 				
 			}
 			else if(choice == 2){
-				DropCourse.drop_course(ip);
+				try{
+					PreparedStatement p0 = connect.getConnection().prepareStatement(Queries.check_if_deadline_already_enforced);
+					ResultSet r = p0.executeQuery();
+				    if(r.next()){
+					int status = r.getInt("STATUS");
+					if (status == 1)
+						{System.out.println("Deadline Already Enforced for this Semester, Can't Drop now.");
+						 connect.close(p0);
+						 viewenrollCourses(ip);
+						}
+					else if (status == 0){
+						connect.close(p0);
+						DropCourse.drop_course(ip);
+					}
+					
+				  }
+				}catch (SQLException e){
+						e.printStackTrace();
+					}
+					catch (Exception e){
+						System.out.println("Invalid values entered. Please enter correct values.");
+						System.out.println(e.getMessage());
+					}
 			}
 			else if(choice == 3){
 				EnrollDropCourses.viewMyCourses(ip);
