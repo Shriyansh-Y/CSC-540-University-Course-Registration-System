@@ -349,39 +349,15 @@ public class AdminView {
 				pfetchvarcredits.setString(1, edata.get(choice-1).cid);
 				ResultSet rvarcredit=pfetchvarcredits.executeQuery();
 				String varcredindicator=null;
-				if(rvarcredit.next())
-				{
-					varcredindicator=rvarcredit.getString("variable_credit");
-				}
-				//System.out.println(varcredindicator);
-
-				if(varcredindicator.equals("No"))
-				{
-					System.out.println("Enter the letter grade for this course :");
-					String grd=ip.next();
-					pinsertgrade.setString(1, grd);
-					pinsertgrade.setInt(2, sid);
-					pinsertgrade.setString(3, edata.get(choice-1).cid);
-					pinsertgrade.executeQuery();
-					proccall.setInt(1, sid);
-					proccall.executeUpdate();
-					
-				}else
-				{
-					System.out.println("This is a variable credit course.");
-					System.out.println("Enter the letter grade for this course :");
-					String grd=ip.next();
-					System.out.println("Enter the number of credits to be awarded for this course :");
-					int crds=ip.nextInt();
-					pinsertgradecredit.setString(1, grd);
-					pinsertgradecredit.setInt(2, crds);
-					pinsertgradecredit.setInt(3, sid);
-					pinsertgradecredit.setString(4, edata.get(choice-1).cid);
-					pinsertgradecredit.executeQuery();
-					proccall.setInt(1, sid);
-					proccall.executeUpdate();
-					
-				}
+				
+				System.out.println("Enter the letter grade for this course :");
+				String grd=ip.next();
+				pinsertgrade.setString(1, grd);
+				pinsertgrade.setInt(2, sid);
+				pinsertgrade.setString(3, edata.get(choice-1).cid);
+				pinsertgrade.executeQuery();
+				proccall.setInt(1, sid);
+				proccall.executeUpdate();
 
 			}
 			else{
