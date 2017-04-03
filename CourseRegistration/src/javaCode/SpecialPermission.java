@@ -170,7 +170,6 @@ public class SpecialPermission {
 					pap1.setString(6, cdata2.get(choice - 1).sem);
 					pap1.setString(7, cdata2.get(choice - 1).fname);
 					pap1.executeUpdate();
-					System.out.println("Ended query");
 					// Enroll the student in the course.
 					boolean check_credit = CheckEligibility.check_credit_limit(1, cdata2.get(choice - 1));
 					if(!check_credit){

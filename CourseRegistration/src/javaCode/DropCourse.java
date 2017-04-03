@@ -30,7 +30,7 @@ public class DropCourse {
 				ac.course_id = r1.getString("COURSE_ID");
 				ac.sem = r1.getString("SEMESTER");
 				ac.fname = r1.getString("FACULTY");
-				ac.credit = r1.getInt("CREDITS");
+				ac.credit = r1.getInt("CREDIT");
 				cdata.add(ac);
 			}
 			System.out.println("Select the courses from below: ");
@@ -89,7 +89,6 @@ public class DropCourse {
 					System.out.println("Select correct option.");
 				}
 				else if(choice <= cdata.size()){
-					System.out.println(cdata.get(choice - 1).sem + " "+ cdata.get(choice - 1).fname + cdata.get(choice - 1).course_id );
 					drop_enrolled(cdata.get(choice - 1), ip);
 					enroll_waitlisted(cdata.get(choice - 1), ip);
 					DropCourse.drop_course(ip);
@@ -178,7 +177,7 @@ public class DropCourse {
 				ac1.wait_number = re2.getInt("WAITLIST_NUMBER");
 				ac1.dropc = re2.getString("DROP_COURSE");
 				ac1.sid = re2.getInt("STUDENT_ID");
-				ac1.credit = re2.getInt("CREDIT");
+				ac1.credit = re2.getInt("CREDITS");
 				boolean check_credit_limit = CheckEligibility.check_credit_limit(0, ac1);
 				if(check_credit_limit){
 					// Enroll the waitlisted student for the course.
