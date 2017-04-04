@@ -298,8 +298,8 @@ public class AdminView {
 				PreparedStatement p3 = connect.getConnection().prepareStatement(Queries.select_course_semester);
 
 				p2.setString(1, cid);
-				p3.setString(1, cid);
-				p3.setInt(2, sid);
+				//p3.setString(1, cid);
+				p3.setInt(1, sid);
 
 
 				ResultSet r2 = p2.executeQuery();
