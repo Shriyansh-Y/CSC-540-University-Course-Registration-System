@@ -335,7 +335,7 @@ public class AdminView {
 				String ks = Integer.toString(k + 1) + ".";
 				System.out.println(ks.format("%-8s", ks) + edata.get(k).cid.format("%-15s", edata.get(k).cid) + edata.get(k).course_name.format("%-30s", edata.get(k).course_name) + edata.get(k).sem.format("%-30s", edata.get(k).sem)+ edata.get(k).lgrade.format("%-15s", edata.get(k).lgrade));
 			}
-			System.out.print("Enter grade for course index (press 0 to go back) : ");
+			System.out.print("Enter index to enter grades (press 0 to go back) : ");
 			int choice = ip.nextInt();
 			if(choice == 0){
 				Login.admin_homepage(ip);

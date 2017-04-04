@@ -4,28 +4,28 @@ INSERT INTO ADMINS VALUES(111, 'alby','hogwarts', 1234567, 'Albus', 'Dumbledore'
 
 
 INSERT INTO COURSES VALUES('CS401', 'Introduction to Computer Science', 'CS',
-'Undergraduate', 0, 'No', 'No', 3, 0);
+'Undergraduate', 'No', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS510', 'Database', 'CS',
-'Graduate', 0, 'No', 'No', 3, 0);
+'Graduate', 'No', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS515', 'Software Engineering', 'CS',
-'Graduate', 0, 'No', 'No', 3, 0);
+'Graduate', 'No', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS520', 'Internet Protocols', 'CS',
-'Graduate', 0, 'No', 'No', 3, 0);
+'Graduate', 'No', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS525', 'Independent Study', 'CS',
-'Graduate', 0, 'Yes', 'Yes', 0, 0);
+'Graduate', 'No', 'Yes', 'Yes', 0, 0);
 INSERT INTO COURSES VALUES('CE420', 'VLSI', 'ECE',
-'Undergraduate', 0, 'No', 'No', 3, 0);
+'Undergraduate', 'No', 'No', 'No', 3, 0);
 
 INSERT INTO COURSES VALUES('CS402', 'Numerical Methods', 'CS',
-'Undergraduate', 0, 'Yes', 'No', 3, 0);
+'Undergraduate', 'Yes', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS505', 'Algorithms', 'CS',
-'Graduate', 0, 'No', 'No', 3, 0);
+'Graduate', 'No', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS521', 'Cloud Computing', 'CS',
-'Graduate', 0, 'Yes', 'No', 3, 3.5);
+'Graduate', 'Yes', 'No', 'No', 3, 3.5);
 INSERT INTO COURSES VALUES('CS421', 'VLSI II', 'ECE',
-'Undergraduate', 0, 'Yes', 'No', 3, 0);
+'Undergraduate', 'Yes', 'No', 'No', 3, 0);
 INSERT INTO COURSES VALUES('CS530', 'Dev-ops', 'CS',
-'Graduate', 0, 'Yes', 'No', 3, 0);
+'Graduate', 'Yes', 'No', 'No', 3, 0);
 
 
 INSERT INTO CREDITMAP VALUES('Graduate', 'In-State', 0, 9, 500);
