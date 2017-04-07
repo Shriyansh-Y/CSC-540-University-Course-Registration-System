@@ -1,0 +1,21 @@
+  treeModel3 <- C5.0(x = iris3.train[, -5], y = iris3.train[, 5])
+  predictTree3 <- predict(treeModel3, iris3.test[, -5])
+  cM3C5.0_iris <- confusionMatrix(iris3.test[, 5], predictTree3)
+  error3C5.0_iris <- c(error3C5.0_iris, (nrow(iris3.test) - sum(diag(cM3C5.0_iris$table))) / nrow(iris3.test))
+  
+  
+    treeModel3 <- C5.0(x = breastcancer3.train[, -2], y = breastcancer3.train[, 2])
+  predictTree3 <- predict(treeModel3, breastcancer3.test[, -2])
+  cM3C5.0_cancer <- confusionMatrix(breastcancer3.test[, 2], predictTree3)
+  error3C5.0_cancer <- c(error3C5.0_cancer, (nrow(breastcancer3.test) - sum(diag(cM3C5.0_cancer$table))) / nrow(breastcancer3.test))
+  
+    svmModel3 <- ksvm(V5 ~ ., iris3.train)
+  predictsvm3 <- predict(svmModel3, iris3.test[, -5])
+  cmSVM3_iris <- confusionMatrix(iris3.test[, 5], predictsvm3)
+  errorsSVM3_iris <- c(errorsSVM3_iris, (nrow(iris3.test) - sum(diag(cmSVM3_iris$table))) / nrow(iris3.test))
+  
+    
+  svmModel3 <- ksvm(V2 ~ ., breastcancer3.train)
+  predictsvm3 <- predict(svmModel3, breastcancer3.test[, -2])
+  cmSVM3_cancer <- confusionMatrix(breastcancer3.test[, 2], predictsvm3)
+  errorsSVM3_cancer <- c(errorsSVM3_cancer, (nrow(breastcancer3.test) - sum(diag(cmSVM3_cancer$table))) / nrow(breastcancer3.test))

@@ -209,6 +209,16 @@ public class StudentView {
 			}
 			else if(choice == 1){
 				try{
+//					PreparedStatement pp1 = connect.getConnection().prepareStatement("SELECT * FROM STUDENTBILL WHERE STUDENT_ID = ?");
+//					pp1.setInt(1, StudentProfile.getInstance().getSid());
+//					ResultSet rspp1 = pp1.executeQuery();
+//					
+//					if(rspp1.next()){
+//						if(rspp1.getInt("TOTAL_AMOUNT") - rspp1.getInt("AMOUNT_PAID") > 0){
+//							System.out.println("Bill pending");
+//							EnrollDropCourses.enrollCourses(ip);
+//						}
+//					}
 					PreparedStatement p0 = connect.getConnection().prepareStatement(Queries.check_if_deadline_already_enforced);
 					ResultSet r = p0.executeQuery();
 				    if(r.next()){
@@ -235,6 +245,9 @@ public class StudentView {
 			}
 			else if(choice == 2){
 				try{
+					
+					
+					
 					PreparedStatement p0 = connect.getConnection().prepareStatement(Queries.check_if_deadline_already_enforced);
 					ResultSet r = p0.executeQuery();
 				    if(r.next()){
